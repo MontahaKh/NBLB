@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout(~{::content})}">
+<head>
+</head>
+<body>
+    <div th:fragment="content">
+        <div class="bg-light rounded h-100 p-4">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h6 class="mb-0">Order List</h6>
+                <div th:if="${userRole == 'CLIENT'}">
+                    <a th:href="@{/order-service/frontpage}" class="btn btn-primary btn-sm">Shop Now</a>
+                </div>
+            </div>
+            
+            <div class="table-responsive">
+                <table class="table text-start align-middle table-bordered table-hover mb-0">
+                    <thead>
+                        <tr class="text-dark">
+                            <th scope="col">ID</th>
+                            <th scope="col">Reference</th>
+                            <th scope="col">Price</th>
+                            <th scope="col">Quantity</th>
+                            <th scope="col">Products</th>
+                            <th scope="col">Date</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="order : ${listOrders}">
+                            <td th:text="${order.id}">1</td>
+                            <td th:text="${order.ref}">REF123</td>
+                            <td th:text="${order.price}">100.0</td>
+                            <td th:text="${order.quantity}">1</td>
+                            <td>
+                                <span th:each="prod, iterStat : ${order.products}" 
+                                      th:text="${prod.name} + ${!iterStat.last ? ', ' : ''}">Product Name</span>
+                            </td>
+                            <td th:text="${#dates.format(order.date, 'yyyy-MM-dd')}">2023-01-01</td>
+                            <td>
+                                <span th:text="${order.status}" 
+                                      th:class="${order.status == 'PAID' ? 'badge bg-success' : (order.status == 'SHIPPED' ? 'badge bg-info' : (order.status == 'CANCELLED' ? 'badge bg-danger' : 'badge bg-warning'))}">PENDING</span>
+                            </td>
+                            <td>
+                                <!-- Shop/Admin Actions -->
+                                <div th:if="${userRole != 'CLIENT'}">
+                                    <a th:if="${order.status == 'PAID'}" 
+                                       th:href="@{/order-service/send/{id}(id=${order.id})}" 
+                                       class="btn btn-primary btn-sm">Send</a>
+                                    <span th:if="${order.status == 'PENDING'}" class="text-warning">Unpaid</span>
+                                    <span th:if="${order.status == 'SHIPPED'}" class="text-success">Sent</span>
+                                    <span th:if="${order.status == 'CANCELLED'}" class="text-danger">Cancelled</span>
+                                    
+                                    <a th:if="${order.status != 'CANCELLED' && order.status != 'SHIPPED'}" 
+                                       th:href="@{/order-service/cancel/{id}(id=${order.id})}" 
+                                       class="btn btn-danger btn-sm ms-1"
+                                       onclick="return confirm('Are you sure you want to cancel this order?')">Cancel</a>
+                                </div>
+                                
+                                <!-- Client Actions -->
+                                <div th:if="${userRole == 'CLIENT'}">
+                                    <a th:if="${order.status == 'PENDING'}" 
+                                       th:href="@{/payment/form(orderId=${order.id},amount=${order.price}, token=${token})}"
+                                       class="btn btn-success btn-sm">Pay</a>
+                                    <a th:if="${order.status == 'PENDING'}"
+                                       th:href="@{/order-service/cancel/{id}(id=${order.id}, token=${token})}"
+
+                                       class="btn btn-danger btn-sm"
+                                       onclick="return confirm('Are you sure you want to cancel this order?')">Cancel</a>
+                                    <span th:if="${order.status == 'CANCELLED'}" class="text-danger">Cancelled</span>
+                                    <span th:if="${order.status == 'SHIPPED'}" class="text-success">Shipped</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(listOrders)}">
+                            <td colspan="8" class="text-center">No orders found.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout(~{::content})}">
+<head>
+</head>
+<body>
+    <div th:fragment="content">
+        <div class="bg-light rounded h-100 p-4">
+            <h6 class="mb-4">Shopping Cart</h6>
+            
+            <div class="table-responsive">
+                <table class="table text-start align-middle table-bordered table-hover mb-0">
+                    <thead>
+                        <tr class="text-dark">
+                            <th scope="col">Product</th>
+                            <th scope="col">Price</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="product : ${cart.products}">
+                            <td th:text="${product.name}">Product Name</td>
+                            <td th:text="${'$' + product.price}">$10.00</td>
+                            <td>
+                                <a th:href="@{/order-service/cart/remove/{id}(id=${product.id},token=${token})}" class="btn btn-sm btn-danger"><i class="fa fa-times"></i> Remove</a>
+                            </td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(cart.products)}">
+                            <td colspan="3" class="text-center">Your cart is empty.</td>
+                        </tr>
+                        <tr th:unless="${#lists.isEmpty(cart.products)}">
+                            <td class="text-end fw-bold">Total:</td>
+                            <td class="fw-bold" th:text="${'$' + totalPrice}">$0.00</td>
+                            <td>
+                                <a th:href="@{http://localhost:8222/order-service/cart/checkout(token=${token})}" class="btn btn-success w-100">Checkout</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

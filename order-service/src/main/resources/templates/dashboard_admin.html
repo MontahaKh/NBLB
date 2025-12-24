@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout(~{::content})}">
+<head>
+</head>
+<body>
+    <div th:fragment="content">
+        <div th:if="${successMessage}" class="alert alert-success" role="alert" th:text="${successMessage}"></div>
+
+        <div class="bg-light rounded p-4 text-center">
+            <h2 class="mb-4">Admin Dashboard</h2>
+            <p class="lead">Welcome, Admin! You have full access to manage orders and products.</p>
+            
+            <div class="d-flex justify-content-center gap-3 mt-4">
+                <a th:href="@{/order-service/allorder}" class="btn btn-primary btn-lg">
+                    <i class="fa fa-tasks me-2"></i>Manage All Orders
+                </a>
+                <a th:href="@{/order-service/list_product}" class="btn btn-secondary btn-lg">
+                    <i class="fa fa-boxes me-2"></i>Manage Products
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: layout(~{::content})}">
+
+<head>
+    <title>Paiement</title>
+</head>
+
+<body>
+<div th:fragment="content">
+    <div class="bg-light rounded h-100 p-4">
+        <h6 class="mb-4">Effectuer un paiement</h6>
+
+        <form th:action="@{/payment/process(token=${token})}" th:object="${payment}" method="post">
+            <input type="hidden" th:field="*{orderId}" />
+
+            <div class="mb-3">
+                <label class="form-label">Montant :</label>
+                <input type="text" class="form-control" th:field="*{amount}" required readonly/>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Méthode :</label>
+                <select class="form-select" th:field="*{type}" required>
+                    <option value="CASH_ON_DELIVERY">Paiement à la livraison</option>
+                    <option value="CARD_STRIPE">Paiement par Carte (Stripe)</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Payer</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>

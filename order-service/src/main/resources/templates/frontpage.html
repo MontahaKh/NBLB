@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout(~{::content})}">
+<head>
+</head>
+<body>
+    <div th:fragment="content">
+        <div th:if="${successMessage}" class="alert alert-success" role="alert" th:text="${successMessage}"></div>
+
+        <h2 class="mb-4">Explore Products</h2>
+
+        <div class="row g-4">
+            <div th:each="product : ${products}" class="col-sm-6 col-xl-3">
+                <div class="bg-light rounded d-flex flex-column h-100 p-4">
+                    <div class="text-center mb-3">
+                        <img th:if="${product.imageUrl != null && !product.imageUrl.isEmpty()}" 
+                             th:src="${product.imageUrl}" alt="Product Image" class="img-fluid rounded" style="max-height: 200px;">
+                        <div th:if="${product.imageUrl == null || product.imageUrl.isEmpty()}" 
+                             class="d-flex align-items-center justify-content-center bg-white rounded" style="height: 200px; color: #aaa;">
+                            <i class="fa fa-image fa-3x"></i>
+                        </div>
+                    </div>
+                    
+                    <h5 class="mb-2" th:text="${product.name}">Product Name</h5>
+                    <p class="text-muted mb-2" th:text="${product.category}">Category</p>
+                    <h6 class="text-primary mb-3" th:text="${'$' + product.price}">$0.00</h6>
+                    <small class="text-muted mb-3" th:text="${'Sold by: ' + product.addedBy}">Shop Name</small>
+                    
+                    <a th:if="${userRole != 'VISITOR'}" th:href="@{/order-service/cart/add/{id}(id=${product.id})}" class="btn btn-primary w-100 mt-auto">Add to Cart</a>
+                    <a th:if="${userRole == 'VISITOR'}" th:href="@{/auth/login}" class="btn btn-warning w-100 mt-auto">Login to Buy</a>
+                </div>
+            </div>
+            
+            <div th:if="${#lists.isEmpty(products)}" class="col-12 text-center text-muted">
+                No products available at the moment.
+            </div>
+        </div>
+    </div>
+</body>
+</html>

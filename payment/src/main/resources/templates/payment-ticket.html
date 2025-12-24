@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: layout(~{::content})}">
+<head>
+    <title>Ticket de Paiement</title>
+    <style>
+        .ticket {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            width: 450px;
+            margin: auto;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+            font-family: Arial;
+        }
+        .title { font-size: 22px; margin-bottom: 20px; font-weight: bold;}
+        .row { margin: 10px 0; }
+        .label { font-weight: bold; }
+    </style>
+</head>
+<body>
+<div th:fragment="content">
+    <div class="ticket">
+        <div class="title">Ticket de Paiement</div>
+
+        <div class="row">
+            <span class="label">ID Paiement :</span>
+            <span th:text="${payment.id}"></span>
+        </div>
+
+        <div class="row">
+            <span class="label">ID Commande :</span>
+            <span th:text="${payment.orderId}"></span>
+        </div>
+
+        <div class="row">
+            <span class="label">Montant :</span>
+            <span th:text="${payment.amount}"></span> TND
+        </div>
+
+        <div class="row">
+            <span class="label">Statut :</span>
+            <span th:text="${payment.status}"></span>
+        </div>
+
+        <div class="row">
+            <span class="label">Date :</span>
+            <span th:text="${payment.date}"></span>
+        </div>
+
+        <hr>
+
+        <a th:href="@{/order-service/allorder(token=${token})}">Voir la commande</a>
+    </div>
+</div>
+</body>
+</html>
