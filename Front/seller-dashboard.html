@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Seller Dashboard - NBLB Market</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+  <link href="css/style.css" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Navbar -->
+  <header class="container-fluid fixed-top px-0">
+    <!-- ... navbar ... -->
+  </header>
+
+  <main class="container-fluid" style="margin-top:120px; margin-bottom:60px;">
+    <div class="row">
+      <!-- Menu gauche -->
+      <aside class="col-lg-3 col-md-4 mb-4">
+        <div class="list-group">
+          <span class="list-group-item list-group-item-action active">Seller Dashboard</span>
+          <a href="#tab-products" class="list-group-item list-group-item-action" data-bs-toggle="tab">My Products</a>
+          <a href="#tab-add" class="list-group-item list-group-item-action" data-bs-toggle="tab">Add Product</a>
+          <a href="#tab-orders" class="list-group-item list-group-item-action" data-bs-toggle="tab">Orders</a>
+        </div>
+      </aside>
+
+      <!-- Contenu -->
+      <section class="col-lg-9 col-md-8">
+        <div class="tab-content">
+
+          <!-- Onglet produits -->
+          <div class="tab-pane fade show active" id="tab-products">
+            <h2 class="mb-3">My Products</h2>
+            <div class="table-responsive">
+              <table class="table table-striped align-middle">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Category</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                  </tr>
+                </thead>
+                <tbody id="sellerProducts">
+                  <!-- rempli par seller.js -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Onglet ajout produit -->
+          <div class="tab-pane fade" id="tab-add">
+            <h2 class="mb-3">Add New Product</h2>
+
+            <form id="addProductForm" class="card p-4 shadow-sm">
+              <div class="mb-3">
+                <label for="productName" class="form-label">Product Name</label>
+                <input id="productName" type="text" class="form-control" required>
+              </div>
+
+              <div class="mb-3">
+                <label for="price" class="form-label">Price (DT)</label>
+                <input id="price" type="number" step="0.01" class="form-control" required>
+              </div>
+
+              <div class="mb-3">
+                <label for="description" class="form-label">Description</label>
+                <textarea id="description" class="form-control" rows="3"></textarea>
+              </div>
+
+              <div class="mb-3">
+                <label for="quantity" class="form-label">Quantity</label>
+                <input id="quantity" type="number" min="1" class="form-control" required>
+              </div>
+
+              <div class="mb-3">
+                <label for="expiryDate" class="form-label">Expiry Date</label>
+                <input id="expiryDate" type="date" class="form-control">
+              </div>
+
+              <div class="mb-3">
+                <label for="category" class="form-label">Category</label>
+                <select id="category" class="form-select" required>
+                  <option value="FRESH_PRODUCE">Fruits & Légumes frais</option>
+                  <option value="DAIRY_PRODUCTS">Produits laitiers</option>
+                  <option value="MEAT_AND_SEAFOOD">Viande & Poisson</option>
+                  <option value="BAKED_GOODS">Boulangerie & Pâtisserie</option>
+                  <option value="PREPARED_FOODS">Plats préparés</option>
+                  <option value="BEVERAGES">Boissons</option>
+                  <option value="FROZEN_FOODS">Surgelés</option>
+                  <option value="HOUSEHOLD">Entretien maison</option>
+                  <option value="PERSONAL_CARE">Hygiène & Beauté</option>
+                </select>
+              </div>
+
+              <div class="mb-3">
+                <label for="imageUrl" class="form-label">Image URL</label>
+                <input id="imageUrl" type="text" class="form-control">
+              </div>
+
+              <button type="submit" class="btn btn-primary w-100">Save Product</button>
+
+              <p id="addProductError" class="text-danger mt-2" style="display:none;">
+                Error while saving the product.
+              </p>
+              <p id="addProductSuccess" class="text-success mt-2" style="display:none;">
+                Product saved successfully.
+              </p>
+            </form>
+          </div>
+
+          <!-- Onglet commandes (simple placeholder pour l’instant) -->
+          <div class="tab-pane fade" id="tab-orders">
+            <h2 class="mb-3">Orders</h2>
+            <p>Tu pourras ici afficher les commandes reçues par le vendeur (GET /order-service/seller-orders).</p>
+          </div>
+
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <!-- ... -->
+
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script src="js/auth-utils.js"></script>
+  <script src="js/seller.js"></script>
+</body>
+</html>
