@@ -1,0 +1,352 @@
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] ------------------------< com.Shadows:gateway >-------------------------
+[INFO] Building gateway 0.0.1-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] >>> spring-boot:3.5.7:run (default-cli) > test-compile @ gateway >>>
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ gateway ---
+[INFO] Copying 1 resource from src\main\resources to target\classes
+[INFO] Copying 0 resource from src\main\resources to target\classes
+[INFO] 
+[INFO] --- compiler:3.14.1:compile (default-compile) @ gateway ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ gateway ---
+[INFO] skip non existing resourceDirectory C:\Users\f\Desktop\NBLBFINAl\gateway\src\test\resources
+[INFO] 
+[INFO] --- compiler:3.14.1:testCompile (default-testCompile) @ gateway ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] <<< spring-boot:3.5.7:run (default-cli) < test-compile @ gateway <<<
+[INFO] 
+[INFO] 
+[INFO] --- spring-boot:3.5.7:run (default-cli) @ gateway ---
+[INFO] Attaching agents: []
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.5.7)
+
+2025-12-27T14:21:49.777+01:00  INFO 35548 --- [gateway] [           main] com.Shadows.gateway.GatewayApplication   : Starting GatewayApplication using Java 17.0.7 with PID 35548 (C:\Users\f\Desktop\NBLBFINAl\gateway\target\classes started by MONTAHA in C:\Users\f\Desktop\NBLBFINAl\gateway)
+2025-12-27T14:21:49.784+01:00  INFO 35548 --- [gateway] [           main] com.Shadows.gateway.GatewayApplication   : No active profile set, falling back to 1 default profile: "default"
+2025-12-27T14:21:53.296+01:00  INFO 35548 --- [gateway] [           main] o.s.cloud.context.scope.GenericScope     : BeanFactory id=04ab4728-2eb3-3d8b-9bbc-029be8a20877
+2025-12-27T14:21:54.694+01:00  WARN 35548 --- [gateway] [           main] GatewayClassPathWarningAutoConfiguration : 
+
+**********************************************************
+
+The artifact spring-cloud-gateway-server is deprecated. It will be removed in the next major release. Please add spring-cloud-gateway-server-webflux dependency.
+
+**********************************************************
+
+
+2025-12-27T14:21:56.588+01:00  INFO 35548 --- [gateway] [           main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [After]
+2025-12-27T14:21:56.589+01:00  INFO 35548 --- [gateway] [           main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Before]
+2025-12-27T14:21:56.589+01:00  INFO 35548 --- [gateway] [           main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Between]
+2025-12-27T14:21:56.589+01:00  INFO 35548 --- [gateway] [           main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Cookie]
+2025-12-27T14:21:56.589+01:00  INFO 35548 --- [gateway] [           main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Header]
+2025-12-27T14:21:56.590+01:00  INFO 35548 --- [gateway] [           main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Host]
+2025-12-27T14:21:56.590+01:00  INFO 35548 --- [gateway] [           main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Method]
+2025-12-27T14:21:56.590+01:00  INFO 35548 --- [gateway] [           main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Path]
+2025-12-27T14:21:56.591+01:00  INFO 35548 --- [gateway] [           main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Query]
+2025-12-27T14:21:56.591+01:00  INFO 35548 --- [gateway] [           main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [ReadBody]
+2025-12-27T14:21:56.592+01:00  INFO 35548 --- [gateway] [           main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [RemoteAddr]
+2025-12-27T14:21:56.592+01:00  INFO 35548 --- [gateway] [           main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [XForwardedRemoteAddr]
+2025-12-27T14:21:56.592+01:00  INFO 35548 --- [gateway] [           main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Weight]
+2025-12-27T14:21:56.592+01:00  INFO 35548 --- [gateway] [           main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [CloudFoundryRouteService]
+2025-12-27T14:21:58.329+01:00  INFO 35548 --- [gateway] [           main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2025-12-27T14:21:59.328+01:00  INFO 35548 --- [gateway] [           main] DiscoveryClientOptionalArgsConfiguration : Eureka HTTP Client uses RestTemplate.
+2025-12-27T14:21:59.444+01:00  WARN 35548 --- [gateway] [           main] s.w.s.StarterDeprecatedAutoConfiguration : 
+
+**********************************************************
+
+spring-cloud-starter-gateway is deprecated. It will be removed in the next major release. Please use spring-cloud-starter-gateway-server-webflux instead.
+
+**********************************************************
+
+
+2025-12-27T14:21:59.475+01:00  WARN 35548 --- [gateway] [           main] iguration$LoadBalancerCaffeineWarnLogger : Spring Cloud LoadBalancer is currently working with the default cache. While this cache implementation is useful for development and tests, it's recommended to use Caffeine cache in production.You can switch to using Caffeine cache, by adding it and org.springframework.cache.caffeine.CaffeineCacheManager to the classpath.
+2025-12-27T14:21:59.724+01:00  INFO 35548 --- [gateway] [           main] o.s.c.n.eureka.InstanceInfoFactory       : Setting initial instance status as: STARTING
+2025-12-27T14:21:59.953+01:00  INFO 35548 --- [gateway] [           main] com.netflix.discovery.DiscoveryClient    : Initializing Eureka in region us-east-1
+2025-12-27T14:21:59.976+01:00  INFO 35548 --- [gateway] [           main] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2025-12-27T14:22:00.010+01:00  INFO 35548 --- [gateway] [           main] com.netflix.discovery.DiscoveryClient    : Disable delta property : false
+2025-12-27T14:22:00.011+01:00  INFO 35548 --- [gateway] [           main] com.netflix.discovery.DiscoveryClient    : Single vip registry refresh property : null
+2025-12-27T14:22:00.011+01:00  INFO 35548 --- [gateway] [           main] com.netflix.discovery.DiscoveryClient    : Force full registry fetch : false
+2025-12-27T14:22:00.011+01:00  INFO 35548 --- [gateway] [           main] com.netflix.discovery.DiscoveryClient    : Application is null : false
+2025-12-27T14:22:00.012+01:00  INFO 35548 --- [gateway] [           main] com.netflix.discovery.DiscoveryClient    : Registered Applications size is zero : true
+2025-12-27T14:22:00.012+01:00  INFO 35548 --- [gateway] [           main] com.netflix.discovery.DiscoveryClient    : Application version is -1: true
+2025-12-27T14:22:00.012+01:00  INFO 35548 --- [gateway] [           main] com.netflix.discovery.DiscoveryClient    : Getting all instance registry info from the eureka server
+2025-12-27T14:22:01.349+01:00  INFO 35548 --- [gateway] [           main] com.netflix.discovery.DiscoveryClient    : The response status is 200
+2025-12-27T14:22:01.354+01:00  INFO 35548 --- [gateway] [           main] com.netflix.discovery.DiscoveryClient    : Not registering with Eureka server per configuration
+2025-12-27T14:22:01.358+01:00  INFO 35548 --- [gateway] [           main] com.netflix.discovery.DiscoveryClient    : Discovery Client initialized at timestamp 1766841721355 with initial instances count: 4
+2025-12-27T14:22:01.372+01:00  INFO 35548 --- [gateway] [           main] o.s.c.n.e.s.EurekaServiceRegistry        : Registering application GATEWAY with eureka with status UP
+2025-12-27T14:22:02.740+01:00  INFO 35548 --- [gateway] [           main] o.s.b.web.embedded.netty.NettyWebServer  : Netty started on port 8222 (http)
+2025-12-27T14:22:02.750+01:00  INFO 35548 --- [gateway] [           main] .s.c.n.e.s.EurekaAutoServiceRegistration : Updating port to 8222
+2025-12-27T14:22:03.642+01:00  INFO 35548 --- [gateway] [           main] com.Shadows.gateway.GatewayApplication   : Started GatewayApplication in 15.071 seconds (process running for 16.009)
+2025-12-27T14:22:03.651+01:00  WARN 35548 --- [gateway] [           main] ServerWebfluxPropertiesMigrationListener : 
+The use of configuration keys that have been renamed was found in the environment:
+
+Property source 'Config resource 'class path resource [application.properties]' via location 'optional:classpath:/'':
+	Key: spring.cloud.gateway.routes[0].id
+		Line: 6
+		Replacement: spring.cloud.gateway.server.webflux.routes[0].id
+	Key: spring.cloud.gateway.routes[0].uri
+		Line: 7
+		Replacement: spring.cloud.gateway.server.webflux.routes[0].uri
+	Key: spring.cloud.gateway.routes[0].predicates[0]
+		Line: 8
+		Replacement: spring.cloud.gateway.server.webflux.routes[0].predicates[0]
+	Key: spring.cloud.gateway.routes[0].filters[0]
+		Line: 9
+		Replacement: spring.cloud.gateway.server.webflux.routes[0].filters[0]
+	Key: spring.cloud.gateway.routes[1].id
+		Line: 10
+		Replacement: spring.cloud.gateway.server.webflux.routes[1].id
+	Key: spring.cloud.gateway.routes[1].uri
+		Line: 11
+		Replacement: spring.cloud.gateway.server.webflux.routes[1].uri
+	Key: spring.cloud.gateway.routes[1].predicates[0]
+		Line: 12
+		Replacement: spring.cloud.gateway.server.webflux.routes[1].predicates[0]
+	Key: spring.cloud.gateway.routes[2].id
+		Line: 13
+		Replacement: spring.cloud.gateway.server.webflux.routes[2].id
+	Key: spring.cloud.gateway.routes[2].uri
+		Line: 14
+		Replacement: spring.cloud.gateway.server.webflux.routes[2].uri
+	Key: spring.cloud.gateway.routes[2].predicates[0]
+		Line: 15
+		Replacement: spring.cloud.gateway.server.webflux.routes[2].predicates[0]
+	Key: spring.cloud.gateway.routes[3].id
+		Line: 16
+		Replacement: spring.cloud.gateway.server.webflux.routes[3].id
+	Key: spring.cloud.gateway.routes[3].uri
+		Line: 17
+		Replacement: spring.cloud.gateway.server.webflux.routes[3].uri
+	Key: spring.cloud.gateway.routes[3].predicates[0]
+		Line: 18
+		Replacement: spring.cloud.gateway.server.webflux.routes[3].predicates[0]
+
+
+Each configuration key has been temporarily mapped to its replacement for your convenience. To silence this warning, please update your configuration to use the new keys.
+
+2025-12-27T14:22:03.654+01:00  WARN 35548 --- [gateway] [           main] o.s.b.c.p.m.PropertiesMigrationListener  : 
+The use of configuration keys that have been renamed was found in the environment:
+
+Property source 'Config resource 'class path resource [application.properties]' via location 'optional:classpath:/'':
+	Key: spring.cloud.gateway.discovery.locator.enabled
+		Line: 5
+		Replacement: spring.cloud.gateway.server.webflux.discovery.locator.enabled
+
+
+Each configuration key has been temporarily mapped to its replacement for your convenience. To silence this warning, please update your configuration to use the new keys.
+
+2025-12-27T14:27:00.438+01:00  INFO 35548 --- [gateway] [rap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2025-12-27T14:29:17.399+01:00 ERROR 35548 --- [gateway] [ctor-http-nio-6] a.w.r.e.AbstractErrorWebExceptionHandler : [4a30bb69-12]  500 Server Error for HTTP GET "/order-service/products"
+
+io.netty.channel.AbstractChannel$AnnotatedConnectException: Connection refused: no further information: localhost/127.0.0.1:8091
+	Suppressed: reactor.core.publisher.FluxOnAssembly$OnAssemblyException: 
+Error has been observed at the following site(s):
+	*__checkpoint ? org.springframework.web.cors.reactive.CorsWebFilter [DefaultWebFilterChain]
+	*__checkpoint ? org.springframework.cloud.gateway.filter.WeightCalculatorWebFilter [DefaultWebFilterChain]
+	*__checkpoint ? HTTP GET "/order-service/products" [ExceptionHandlingWebHandler]
+Original Stack Trace:
+Caused by: java.net.ConnectException: Connection refused: no further information
+	at java.base/sun.nio.ch.Net.pollConnect(Native Method) ~[na:na]
+	at java.base/sun.nio.ch.Net.pollConnectNow(Net.java:672) ~[na:na]
+	at java.base/sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:946) ~[na:na]
+	at io.netty.channel.socket.nio.NioSocketChannel.doFinishConnect(NioSocketChannel.java:336) ~[netty-transport-4.1.128.Final.jar:4.1.128.Final]
+	at io.netty.channel.nio.AbstractNioChannel$AbstractNioUnsafe.finishConnect(AbstractNioChannel.java:339) ~[netty-transport-4.1.128.Final.jar:4.1.128.Final]
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:784) ~[netty-transport-4.1.128.Final.jar:4.1.128.Final]
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:732) ~[netty-transport-4.1.128.Final.jar:4.1.128.Final]
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:658) ~[netty-transport-4.1.128.Final.jar:4.1.128.Final]
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:562) ~[netty-transport-4.1.128.Final.jar:4.1.128.Final]
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:998) ~[netty-common-4.1.128.Final.jar:4.1.128.Final]
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74) ~[netty-common-4.1.128.Final.jar:4.1.128.Final]
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30) ~[netty-common-4.1.128.Final.jar:4.1.128.Final]
+	at java.base/java.lang.Thread.run(Thread.java:833) ~[na:na]
+
+2025-12-27T14:29:20.952+01:00 ERROR 35548 --- [gateway] [ctor-http-nio-6] a.w.r.e.AbstractErrorWebExceptionHandler : [4a30bb69-14]  500 Server Error for HTTP GET "/order-service/api/orders/me"
+
+io.netty.channel.AbstractChannel$AnnotatedConnectException: Connection refused: no further information: localhost/127.0.0.1:8091
+	Suppressed: reactor.core.publisher.FluxOnAssembly$OnAssemblyException: 
+Error has been observed at the following site(s):
+	*__checkpoint ? org.springframework.web.cors.reactive.CorsWebFilter [DefaultWebFilterChain]
+	*__checkpoint ? org.springframework.cloud.gateway.filter.WeightCalculatorWebFilter [DefaultWebFilterChain]
+	*__checkpoint ? HTTP GET "/order-service/api/orders/me" [ExceptionHandlingWebHandler]
+Original Stack Trace:
+Caused by: java.net.ConnectException: Connection refused: no further information
+	at java.base/sun.nio.ch.Net.pollConnect(Native Method) ~[na:na]
+	at java.base/sun.nio.ch.Net.pollConnectNow(Net.java:672) ~[na:na]
+	at java.base/sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:946) ~[na:na]
+	at io.netty.channel.socket.nio.NioSocketChannel.doFinishConnect(NioSocketChannel.java:336) ~[netty-transport-4.1.128.Final.jar:4.1.128.Final]
+	at io.netty.channel.nio.AbstractNioChannel$AbstractNioUnsafe.finishConnect(AbstractNioChannel.java:339) ~[netty-transport-4.1.128.Final.jar:4.1.128.Final]
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:784) ~[netty-transport-4.1.128.Final.jar:4.1.128.Final]
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:732) ~[netty-transport-4.1.128.Final.jar:4.1.128.Final]
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:658) ~[netty-transport-4.1.128.Final.jar:4.1.128.Final]
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:562) ~[netty-transport-4.1.128.Final.jar:4.1.128.Final]
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:998) ~[netty-common-4.1.128.Final.jar:4.1.128.Final]
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74) ~[netty-common-4.1.128.Final.jar:4.1.128.Final]
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30) ~[netty-common-4.1.128.Final.jar:4.1.128.Final]
+	at java.base/java.lang.Thread.run(Thread.java:833) ~[na:na]
+
+2025-12-27T14:29:31.248+01:00 ERROR 35548 --- [gateway] [ctor-http-nio-7] a.w.r.e.AbstractErrorWebExceptionHandler : [60d6ecb3-16]  500 Server Error for HTTP GET "/order-service/my-products"
+
+io.netty.channel.AbstractChannel$AnnotatedConnectException: Connection refused: no further information: localhost/127.0.0.1:8091
+	Suppressed: reactor.core.publisher.FluxOnAssembly$OnAssemblyException: 
+Error has been observed at the following site(s):
+	*__checkpoint ? org.springframework.web.cors.reactive.CorsWebFilter [DefaultWebFilterChain]
+	*__checkpoint ? org.springframework.cloud.gateway.filter.WeightCalculatorWebFilter [DefaultWebFilterChain]
+	*__checkpoint ? HTTP GET "/order-service/my-products" [ExceptionHandlingWebHandler]
+Original Stack Trace:
+Caused by: java.net.ConnectException: Connection refused: no further information
+	at java.base/sun.nio.ch.Net.pollConnect(Native Method) ~[na:na]
+	at java.base/sun.nio.ch.Net.pollConnectNow(Net.java:672) ~[na:na]
+	at java.base/sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:946) ~[na:na]
+	at io.netty.channel.socket.nio.NioSocketChannel.doFinishConnect(NioSocketChannel.java:336) ~[netty-transport-4.1.128.Final.jar:4.1.128.Final]
+	at io.netty.channel.nio.AbstractNioChannel$AbstractNioUnsafe.finishConnect(AbstractNioChannel.java:339) ~[netty-transport-4.1.128.Final.jar:4.1.128.Final]
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:784) ~[netty-transport-4.1.128.Final.jar:4.1.128.Final]
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:732) ~[netty-transport-4.1.128.Final.jar:4.1.128.Final]
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:658) ~[netty-transport-4.1.128.Final.jar:4.1.128.Final]
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:562) ~[netty-transport-4.1.128.Final.jar:4.1.128.Final]
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:998) ~[netty-common-4.1.128.Final.jar:4.1.128.Final]
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74) ~[netty-common-4.1.128.Final.jar:4.1.128.Final]
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30) ~[netty-common-4.1.128.Final.jar:4.1.128.Final]
+	at java.base/java.lang.Thread.run(Thread.java:833) ~[na:na]
+
+2025-12-27T14:30:00.962+01:00 ERROR 35548 --- [gateway] [ctor-http-nio-1] a.w.r.e.AbstractErrorWebExceptionHandler : [aac502ba-22]  500 Server Error for HTTP GET "/order-service/my-products"
+
+io.netty.channel.AbstractChannel$AnnotatedConnectException: Connection refused: no further information: localhost/127.0.0.1:8091
+	Suppressed: reactor.core.publisher.FluxOnAssembly$OnAssemblyException: 
+Error has been observed at the following site(s):
+	*__checkpoint ? org.springframework.web.cors.reactive.CorsWebFilter [DefaultWebFilterChain]
+	*__checkpoint ? org.springframework.cloud.gateway.filter.WeightCalculatorWebFilter [DefaultWebFilterChain]
+	*__checkpoint ? HTTP GET "/order-service/my-products" [ExceptionHandlingWebHandler]
+Original Stack Trace:
+Caused by: java.net.ConnectException: Connection refused: no further information
+	at java.base/sun.nio.ch.Net.pollConnect(Native Method) ~[na:na]
+	at java.base/sun.nio.ch.Net.pollConnectNow(Net.java:672) ~[na:na]
+	at java.base/sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:946) ~[na:na]
+	at io.netty.channel.socket.nio.NioSocketChannel.doFinishConnect(NioSocketChannel.java:336) ~[netty-transport-4.1.128.Final.jar:4.1.128.Final]
+	at io.netty.channel.nio.AbstractNioChannel$AbstractNioUnsafe.finishConnect(AbstractNioChannel.java:339) ~[netty-transport-4.1.128.Final.jar:4.1.128.Final]
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:784) ~[netty-transport-4.1.128.Final.jar:4.1.128.Final]
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:732) ~[netty-transport-4.1.128.Final.jar:4.1.128.Final]
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:658) ~[netty-transport-4.1.128.Final.jar:4.1.128.Final]
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:562) ~[netty-transport-4.1.128.Final.jar:4.1.128.Final]
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:998) ~[netty-common-4.1.128.Final.jar:4.1.128.Final]
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74) ~[netty-common-4.1.128.Final.jar:4.1.128.Final]
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30) ~[netty-common-4.1.128.Final.jar:4.1.128.Final]
+	at java.base/java.lang.Thread.run(Thread.java:833) ~[na:na]
+
+2025-12-27T14:30:43.496+01:00 ERROR 35548 --- [gateway] [ctor-http-nio-2] a.w.r.e.AbstractErrorWebExceptionHandler : [0cba69ae-24]  500 Server Error for HTTP POST "/order-service/products"
+
+io.netty.channel.AbstractChannel$AnnotatedConnectException: Connection refused: no further information: localhost/127.0.0.1:8091
+	Suppressed: reactor.core.publisher.FluxOnAssembly$OnAssemblyException: 
+Error has been observed at the following site(s):
+	*__checkpoint ? org.springframework.web.cors.reactive.CorsWebFilter [DefaultWebFilterChain]
+	*__checkpoint ? org.springframework.cloud.gateway.filter.WeightCalculatorWebFilter [DefaultWebFilterChain]
+	*__checkpoint ? HTTP POST "/order-service/products" [ExceptionHandlingWebHandler]
+Original Stack Trace:
+Caused by: java.net.ConnectException: Connection refused: no further information
+	at java.base/sun.nio.ch.Net.pollConnect(Native Method) ~[na:na]
+	at java.base/sun.nio.ch.Net.pollConnectNow(Net.java:672) ~[na:na]
+	at java.base/sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:946) ~[na:na]
+	at io.netty.channel.socket.nio.NioSocketChannel.doFinishConnect(NioSocketChannel.java:336) ~[netty-transport-4.1.128.Final.jar:4.1.128.Final]
+	at io.netty.channel.nio.AbstractNioChannel$AbstractNioUnsafe.finishConnect(AbstractNioChannel.java:339) ~[netty-transport-4.1.128.Final.jar:4.1.128.Final]
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:784) ~[netty-transport-4.1.128.Final.jar:4.1.128.Final]
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:732) ~[netty-transport-4.1.128.Final.jar:4.1.128.Final]
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:658) ~[netty-transport-4.1.128.Final.jar:4.1.128.Final]
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:562) ~[netty-transport-4.1.128.Final.jar:4.1.128.Final]
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:998) ~[netty-common-4.1.128.Final.jar:4.1.128.Final]
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74) ~[netty-common-4.1.128.Final.jar:4.1.128.Final]
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30) ~[netty-common-4.1.128.Final.jar:4.1.128.Final]
+	at java.base/java.lang.Thread.run(Thread.java:833) ~[na:na]
+
+2025-12-27T14:30:46.433+01:00 ERROR 35548 --- [gateway] [ctor-http-nio-3] a.w.r.e.AbstractErrorWebExceptionHandler : [2fa2b355-25]  500 Server Error for HTTP POST "/order-service/products"
+
+io.netty.channel.AbstractChannel$AnnotatedConnectException: Connection refused: no further information: localhost/127.0.0.1:8091
+	Suppressed: reactor.core.publisher.FluxOnAssembly$OnAssemblyException: 
+Error has been observed at the following site(s):
+	*__checkpoint ? org.springframework.web.cors.reactive.CorsWebFilter [DefaultWebFilterChain]
+	*__checkpoint ? org.springframework.cloud.gateway.filter.WeightCalculatorWebFilter [DefaultWebFilterChain]
+	*__checkpoint ? HTTP POST "/order-service/products" [ExceptionHandlingWebHandler]
+Original Stack Trace:
+Caused by: java.net.ConnectException: Connection refused: no further information
+	at java.base/sun.nio.ch.Net.pollConnect(Native Method) ~[na:na]
+	at java.base/sun.nio.ch.Net.pollConnectNow(Net.java:672) ~[na:na]
+	at java.base/sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:946) ~[na:na]
+	at io.netty.channel.socket.nio.NioSocketChannel.doFinishConnect(NioSocketChannel.java:336) ~[netty-transport-4.1.128.Final.jar:4.1.128.Final]
+	at io.netty.channel.nio.AbstractNioChannel$AbstractNioUnsafe.finishConnect(AbstractNioChannel.java:339) ~[netty-transport-4.1.128.Final.jar:4.1.128.Final]
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:784) ~[netty-transport-4.1.128.Final.jar:4.1.128.Final]
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:732) ~[netty-transport-4.1.128.Final.jar:4.1.128.Final]
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:658) ~[netty-transport-4.1.128.Final.jar:4.1.128.Final]
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:562) ~[netty-transport-4.1.128.Final.jar:4.1.128.Final]
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:998) ~[netty-common-4.1.128.Final.jar:4.1.128.Final]
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74) ~[netty-common-4.1.128.Final.jar:4.1.128.Final]
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30) ~[netty-common-4.1.128.Final.jar:4.1.128.Final]
+	at java.base/java.lang.Thread.run(Thread.java:833) ~[na:na]
+
+2025-12-27T14:32:00.761+01:00  INFO 35548 --- [gateway] [rap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2025-12-27T14:35:19.642+01:00 ERROR 35548 --- [gateway] [ctor-http-nio-4] a.w.r.e.AbstractErrorWebExceptionHandler : [ade5bdc6-26]  500 Server Error for HTTP GET "/order-service/products"
+
+io.netty.channel.AbstractChannel$AnnotatedConnectException: Connection refused: no further information: localhost/127.0.0.1:8091
+	Suppressed: reactor.core.publisher.FluxOnAssembly$OnAssemblyException: 
+Error has been observed at the following site(s):
+	*__checkpoint ? org.springframework.web.cors.reactive.CorsWebFilter [DefaultWebFilterChain]
+	*__checkpoint ? org.springframework.cloud.gateway.filter.WeightCalculatorWebFilter [DefaultWebFilterChain]
+	*__checkpoint ? HTTP GET "/order-service/products" [ExceptionHandlingWebHandler]
+Original Stack Trace:
+Caused by: java.net.ConnectException: Connection refused: no further information
+	at java.base/sun.nio.ch.Net.pollConnect(Native Method) ~[na:na]
+	at java.base/sun.nio.ch.Net.pollConnectNow(Net.java:672) ~[na:na]
+	at java.base/sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:946) ~[na:na]
+	at io.netty.channel.socket.nio.NioSocketChannel.doFinishConnect(NioSocketChannel.java:336) ~[netty-transport-4.1.128.Final.jar:4.1.128.Final]
+	at io.netty.channel.nio.AbstractNioChannel$AbstractNioUnsafe.finishConnect(AbstractNioChannel.java:339) ~[netty-transport-4.1.128.Final.jar:4.1.128.Final]
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:784) ~[netty-transport-4.1.128.Final.jar:4.1.128.Final]
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:732) ~[netty-transport-4.1.128.Final.jar:4.1.128.Final]
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:658) ~[netty-transport-4.1.128.Final.jar:4.1.128.Final]
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:562) ~[netty-transport-4.1.128.Final.jar:4.1.128.Final]
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:998) ~[netty-common-4.1.128.Final.jar:4.1.128.Final]
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74) ~[netty-common-4.1.128.Final.jar:4.1.128.Final]
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30) ~[netty-common-4.1.128.Final.jar:4.1.128.Final]
+	at java.base/java.lang.Thread.run(Thread.java:833) ~[na:na]
+
+2025-12-27T14:35:44.089+01:00 ERROR 35548 --- [gateway] [ctor-http-nio-4] a.w.r.e.AbstractErrorWebExceptionHandler : [ade5bdc6-27]  500 Server Error for HTTP GET "/order-service/products"
+
+io.netty.channel.AbstractChannel$AnnotatedConnectException: Connection refused: no further information: localhost/127.0.0.1:8091
+	Suppressed: reactor.core.publisher.FluxOnAssembly$OnAssemblyException: 
+Error has been observed at the following site(s):
+	*__checkpoint ? org.springframework.web.cors.reactive.CorsWebFilter [DefaultWebFilterChain]
+	*__checkpoint ? org.springframework.cloud.gateway.filter.WeightCalculatorWebFilter [DefaultWebFilterChain]
+	*__checkpoint ? HTTP GET "/order-service/products" [ExceptionHandlingWebHandler]
+Original Stack Trace:
+Caused by: java.net.ConnectException: Connection refused: no further information
+	at java.base/sun.nio.ch.Net.pollConnect(Native Method) ~[na:na]
+	at java.base/sun.nio.ch.Net.pollConnectNow(Net.java:672) ~[na:na]
+	at java.base/sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:946) ~[na:na]
+	at io.netty.channel.socket.nio.NioSocketChannel.doFinishConnect(NioSocketChannel.java:336) ~[netty-transport-4.1.128.Final.jar:4.1.128.Final]
+	at io.netty.channel.nio.AbstractNioChannel$AbstractNioUnsafe.finishConnect(AbstractNioChannel.java:339) ~[netty-transport-4.1.128.Final.jar:4.1.128.Final]
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:784) ~[netty-transport-4.1.128.Final.jar:4.1.128.Final]
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:732) ~[netty-transport-4.1.128.Final.jar:4.1.128.Final]
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:658) ~[netty-transport-4.1.128.Final.jar:4.1.128.Final]
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:562) ~[netty-transport-4.1.128.Final.jar:4.1.128.Final]
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:998) ~[netty-common-4.1.128.Final.jar:4.1.128.Final]
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74) ~[netty-common-4.1.128.Final.jar:4.1.128.Final]
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30) ~[netty-common-4.1.128.Final.jar:4.1.128.Final]
+	at java.base/java.lang.Thread.run(Thread.java:833) ~[na:na]
+
+2025-12-27T14:37:00.776+01:00  INFO 35548 --- [gateway] [rap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2025-12-27T14:42:00.792+01:00  INFO 35548 --- [gateway] [rap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2025-12-27T14:47:00.810+01:00  INFO 35548 --- [gateway] [rap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2025-12-27T14:52:00.830+01:00  INFO 35548 --- [gateway] [rap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2025-12-27T14:57:00.861+01:00  INFO 35548 --- [gateway] [rap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2025-12-27T15:02:00.961+01:00  INFO 35548 --- [gateway] [rap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2025-12-27T15:02:59.191+01:00  INFO 35548 --- [gateway] [ionShutdownHook] o.s.c.n.e.s.EurekaServiceRegistry        : Unregistering application GATEWAY with eureka with status DOWN
+2025-12-27T15:02:59.541+01:00  INFO 35548 --- [gateway] [ionShutdownHook] o.s.b.w.embedded.netty.GracefulShutdown  : Commencing graceful shutdown. Waiting for active requests to complete

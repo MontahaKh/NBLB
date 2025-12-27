@@ -3,6 +3,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     requireSeller();
     loadSellerProducts();
+    loadSellerSales();
 });
 
 // --------- Liste des produits du vendeur ---------
@@ -44,6 +45,52 @@ async function loadSellerProducts() {
     } catch (err) {
         console.error(err);
         container.innerHTML = '<tr><td colspan="5">Erreur réseau.</td></tr>';
+    }
+}
+
+// --------- Produits vendus (commandes payées / en livraison / expédiées) ---------
+async function loadSellerSales() {
+    const tbody = document.getElementById('sellerSales');
+    if (!tbody) return;
+
+    tbody.innerHTML = '<tr><td colspan="6" class="text-center">Loading...</td></tr>';
+
+    try {
+        const res = await fetch(`${API_BASE}/order-service/api/seller/sales`, {
+            headers: {
+                'Authorization': 'Bearer ' + getToken()
+            }
+        });
+
+        if (!res.ok) {
+            const msg = await res.text().catch(() => null);
+            tbody.innerHTML = `<tr><td colspan="6" class="text-center text-danger">Failed to load sales${msg ? ': ' + msg : ''}</td></tr>`;
+            return;
+        }
+
+        const sales = await res.json();
+        if (!sales || sales.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="6" class="text-center">No sales yet.</td></tr>';
+            return;
+        }
+
+        tbody.innerHTML = '';
+        sales.forEach(s => {
+            const date = s.orderDate ? new Date(s.orderDate).toLocaleString() : '';
+            tbody.innerHTML += `
+        <tr>
+          <td>${s.orderId ?? ''}</td>
+          <td>${date}</td>
+          <td>${s.buyerUsername ?? ''}</td>
+          <td>${s.productName ?? ''}</td>
+          <td>${(s.unitPrice ?? 0)} DT</td>
+          <td>${s.orderStatus ?? ''}</td>
+        </tr>
+      `;
+        });
+    } catch (err) {
+        console.error(err);
+        tbody.innerHTML = '<tr><td colspan="6" class="text-center text-danger">Network error.</td></tr>';
     }
 }
 

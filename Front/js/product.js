@@ -24,7 +24,12 @@ async function loadProducts() {
               <h5 class="mb-2">${p.name}</h5>
               <p class="mb-2 small">${p.description || ''}</p>
               <h4 class="text-primary mb-3">${p.price} DT</h4>
-              <button class="btn btn-outline-primary add-to-cart" data-id="${p.id}">
+              <button
+                class="btn btn-outline-primary add-to-cart"
+                data-id="${p.id}"
+                data-name="${encodeHtmlAttr(p.name || '')}"
+                data-price="${p.price}"
+                data-image="${encodeHtmlAttr(p.imageUrl || '')}">
                 Add to Cart
               </button>
             </div>
@@ -33,55 +38,37 @@ async function loadProducts() {
       `;
     });
 
-    attachAddToCart();
+    attachAddToCart(container);
   } catch (err) {
     console.error(err);
   }
 }
 
-function attachAddToCart() {
-  document.querySelectorAll('.add-to-cart').forEach(btn => {
-    btn.addEventListener('click', async (e) => {
-      e.preventDefault();
-      if (!getToken()) {
-        window.location.href = 'login.html';
-        return;
-      }
+function attachAddToCart(container) {
+  // One delegated handler for dynamic buttons
+  container.addEventListener('click', (e) => {
+    const btn = e.target.closest('.add-to-cart');
+    if (!btn) return;
+    e.preventDefault();
 
-      const productId = btn.dataset.id;
-      try {
-        const res = await fetch(`${API_BASE}/order-service/cart`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + getToken()
-          },
-          body: JSON.stringify({ productId, quantity: 1 })
-        });
+    const id = parseInt(btn.dataset.id, 10);
+    if (!Number.isFinite(id)) return;
 
-        if (res.ok) {
-          alert('Produit ajouté au panier');
-        } else {
-          alert('Erreur lors de l’ajout au panier');
-        }
-      } catch (err) {
-        console.error(err);
-        alert('Erreur réseau');
-      }
+    addToCart({
+      id,
+      name: btn.dataset.name || '',
+      price: parseFloat(btn.dataset.price) || 0,
+      imageUrl: btn.dataset.image || ''
     });
+    alert('Produit ajouté au panier');
   });
+}
 
-
-    document.addEventListener('click', e => {
-        if (e.target.classList.contains('add-to-cart')) {
-            const btn = e.target;
-            addToCart({
-                id: parseInt(btn.dataset.id),
-                name: btn.dataset.name,
-                price: parseFloat(btn.dataset.price),
-                imageUrl: btn.dataset.image || ''
-            });
-        }
-    });
-
+function encodeHtmlAttr(value) {
+  return String(value)
+    .replaceAll('&', '&amp;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#39;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;');
 }

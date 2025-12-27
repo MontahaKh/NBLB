@@ -1,7 +1,6 @@
 package com.Shadows.orderservice.controller;
 
 import com.Shadows.orderservice.util.JwtUtil;
-import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.ui.Model;
 import com.Shadows.orderservice.model.Order;
@@ -12,6 +11,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
@@ -84,8 +86,43 @@ public class OrderController {
 
     @RequestMapping(value = "/api/orders/{id}/status", method = {RequestMethod.POST, RequestMethod.GET})
     @org.springframework.web.bind.annotation.ResponseBody
-    public String updateOrderStatusApi(@PathVariable Long id, @RequestParam String status) {
+    public ResponseEntity<String> updateOrderStatusApi(
+            @PathVariable Long id,
+            @RequestParam String status,
+            @RequestHeader(value = "Authorization", required = false) String authorization
+    ) {
+        String token = null;
+        if (authorization != null && authorization.startsWith("Bearer ")) {
+            token = authorization.substring("Bearer ".length()).trim();
+        }
+        if (token == null || !jwtUtil.validateToken(token)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Missing/invalid token");
+        }
+
+        java.util.Optional<Order> orderOpt = orderService.getOrderById(id);
+        if (orderOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Order not found");
+        }
+
+        Order order = orderOpt.get();
+        String role = String.valueOf(jwtUtil.extractRole(token));
+        String username = String.valueOf(jwtUtil.extractUsername(token));
+
+        boolean isAdmin = "ADMIN".equalsIgnoreCase(role);
+        boolean isOwner = username != null && username.equalsIgnoreCase(order.getUsername());
+
+        // Minimal authorization rules:
+        // - owner can set PAID / WAITING_DELIVERY / CANCELLED
+        // - admin can set any status
+        if (!isAdmin) {
+            String s = String.valueOf(status).toUpperCase(java.util.Locale.ROOT);
+            boolean allowed = isOwner && (s.equals("PAID") || s.equals("WAITING_DELIVERY") || s.equals("CANCELLED"));
+            if (!allowed) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Forbidden");
+            }
+        }
+
         orderService.updateOrderStatus(id, status);
-        return "Status updated";
+        return ResponseEntity.ok("Status updated");
     }
 }

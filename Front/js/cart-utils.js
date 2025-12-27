@@ -1,6 +1,7 @@
 // js/cart-utils.js
 
-const CART_KEY = 'nblb_cart';
+// Keep the cart key consistent across pages
+const CART_KEY = 'cart';
 
 function loadCart() {
     const raw = localStorage.getItem(CART_KEY);
@@ -28,6 +29,37 @@ function addToCart(product) {
     }
     saveCart(cart);
     updateCartCount();
+    showCartMessage('Product added to cart');
+}
+
+function showCartMessage(message) {
+    try {
+        let container = document.getElementById('cartMessageContainer');
+        if (!container) {
+            container = document.createElement('div');
+            container.id = 'cartMessageContainer';
+            container.style.position = 'fixed';
+            container.style.top = '90px';
+            container.style.right = '16px';
+            container.style.zIndex = '9999';
+            document.body.appendChild(container);
+        }
+
+        const alertEl = document.createElement('div');
+        alertEl.className = 'alert alert-success py-2 px-3 mb-2 shadow-sm';
+        alertEl.textContent = message;
+        container.appendChild(alertEl);
+
+        setTimeout(() => {
+            alertEl.remove();
+            if (container && container.childElementCount === 0) {
+                container.remove();
+            }
+        }, 1500);
+    } catch {
+        // fallback
+        alert(message);
+    }
 }
 
 function removeFromCart(productId) {

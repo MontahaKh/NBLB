@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const token = getToken();
 
         try {
-            const res = await fetch(`${API_BASE}/payment-service/api/process`, {
+            const res = await fetch(`${API_BASE}/payment/api/process`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

@@ -5,6 +5,10 @@ public enum Category {
     DAIRY_PRODUCTS,
     MEAT_AND_SEAFOOD,
     BAKED_GOODS,
-    PREPARED_FOODS
+    PREPARED_FOODS,
+    BEVERAGES,
+    FROZEN_FOODS,
+    HOUSEHOLD,
+    PERSONAL_CARE
     
 }

@@ -116,7 +116,24 @@
           <!-- Onglet commandes (simple placeholder pour l’instant) -->
           <div class="tab-pane fade" id="tab-orders">
             <h2 class="mb-3">Orders</h2>
-            <p>Tu pourras ici afficher les commandes reçues par le vendeur (GET /order-service/seller-orders).</p>
+            <p class="text-muted">Sold products (paid / delivery / shipped).</p>
+            <div class="table-responsive">
+              <table class="table table-striped align-middle">
+                <thead>
+                <tr>
+                  <th>Order #</th>
+                  <th>Date</th>
+                  <th>Buyer</th>
+                  <th>Product</th>
+                  <th>Unit Price</th>
+                  <th>Status</th>
+                </tr>
+                </thead>
+                <tbody id="sellerSales">
+                <tr><td colspan="6" class="text-center">Loading...</td></tr>
+                </tbody>
+              </table>
+            </div>
           </div>
 
         </div>

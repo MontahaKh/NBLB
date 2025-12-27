@@ -15,11 +15,11 @@ public class CorsConfig {
     public CorsWebFilter corsWebFilter() {
         CorsConfiguration config = new CorsConfiguration();
 
-        // Origines autorisées : ton front
-        config.setAllowedOrigins(Arrays.asList(
-                "http://localhost:63342",
-                "http://127.0.0.1:63342",
-                "null"
+        // Origines autorisées (dev): éviter les soucis de parsing/ports avec allowedOriginPatterns
+        config.setAllowedOriginPatterns(Arrays.asList(
+            "http://localhost:*",
+            "http://127.0.0.1:*",
+            "null"
         ));
 
         config.setAllowCredentials(true);

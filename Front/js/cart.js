@@ -52,35 +52,6 @@ async function checkoutCart() {
     }
 }
 
-function loadCart() {
-    try {
-        return JSON.parse(localStorage.getItem('cart')) || [];
-    } catch (e) {
-        return [];
-    }
-}
-
-function saveCart(cart) {
-    localStorage.setItem('cart', JSON.stringify(cart));
-}
-
-function getCartTotal() {
-    const cart = loadCart();
-    return cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-}
-
-function updateQuantity(id, qty) {
-    const cart = loadCart();
-    const item = cart.find(p => p.id === id);
-    if (item) item.quantity = qty;
-    saveCart(cart);
-}
-
-function removeFromCart(id) {
-    const cart = loadCart().filter(p => p.id !== id);
-    saveCart(cart);
-}
-
 document.addEventListener('DOMContentLoaded', () => {
     if (!getToken()) {
         window.location.href = 'login.html';

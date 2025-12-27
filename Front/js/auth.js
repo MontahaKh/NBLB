@@ -28,20 +28,24 @@ if (loginForm) {
 
             const data = await res.json(); // attendu: { token, role, username? }
 
+            // Supporte différents formats possibles: {role}, {roles:[...]}, {authorities:[...]}
+            const roleCandidate = (data && (data.role || (Array.isArray(data.roles) ? data.roles[0] : null) || (Array.isArray(data.authorities) ? data.authorities[0] : null))) || '';
+            const role = normalizeRole(roleCandidate);
+
             // Sauvegarde dans localStorage (défini dans auth-utils.js)
             saveAuth({
                 token: data.token,
-                role: data.role,
+                role,
                 username: data.username || username
             });
 
             // Redirection selon le rôle (front)
-            if (data.role === 'ADMIN') {
-                window.location.href = 'admin-dashboard.html';
-            } else if (data.role === 'SHOP' || data.role === 'SHOP') {
-                window.location.href = 'seller-dashboard.html';
+            if (role === 'ADMIN') {
+                window.location.href = frontUrl('admin-dashboard.html');
+            } else if (role === 'SHOP' || role === 'SELLER') {
+                window.location.href = frontUrl('seller-dashboard.html');
             } else {
-                window.location.href = 'index.html';
+                window.location.href = frontUrl('index.html');
             }
         } catch (err) {
             console.error(err);

@@ -315,30 +315,15 @@
 
 <script src="js/main.js"></script>
 <script src="js/auth-utils.js"></script>
+<script src="js/cart-utils.js"></script>
 
 <script>
-    // panier
-    function getCart() {
-        try { return JSON.parse(localStorage.getItem('cart')) || []; }
-        catch(e) { return []; }
-    }
-    function saveCart(cart){ localStorage.setItem('cart', JSON.stringify(cart)); }
-
-    function addToCart(product){
-        const cart = getCart();
-        const existing = cart.find(i => i.id === product.id);
-        if (existing) existing.quantity += 1;
-        else cart.push({id: product.id, name: product.name, price: product.price, quantity: 1});
-        saveCart(cart);
-        alert('Product added to cart');
-    }
-
     async function loadHomeProducts(){
         const container = document.getElementById('homeProductList');
         if (!container) return;
 
         try{
-            const res = await fetch(`${API_BASE}/order-service/public/products`);
+            const res = await fetch(`${API_BASE}/order-service/products`);
             if (!res.ok){
                 container.innerHTML = '<div class="col-12 text-center"><p>Erreur lors du chargement des produits.</p></div>';
                 return;
@@ -372,7 +357,7 @@
                     </small>
                     <small class="w-50 text-center py-2">
                       <a href="#" class="text-body"
-                         onclick='event.preventDefault(); addToCart(${JSON.stringify(p).replace(/"/g,"&quot;")});'>
+                                                 onclick='event.preventDefault(); addToCart(${JSON.stringify(p).replace(/"/g,"&quot;")});'>
                         <i class="fa fa-shopping-bag text-primary me-2"></i>Add to cart
                       </a>
                     </small>

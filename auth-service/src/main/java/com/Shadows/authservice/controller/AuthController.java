@@ -3,6 +3,7 @@ package com.Shadows.authservice.controller;
 import com.Shadows.authservice.model.User;
 import com.Shadows.authservice.service.AuthService;
 import java.util.Map;
+import java.util.Objects;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -60,10 +61,14 @@ public class AuthController {
             ResponseEntity<?> response = authService.loginUser(user);
             if (response.getStatusCode().is2xxSuccessful()) {
                 // Extract token and role from response
-                Map<String, String> responseBody = (Map<String, String>) response.getBody();
-                if (responseBody != null && responseBody.containsKey("token")) {
-                    String token = responseBody.get("token");
-                    String role = responseBody.get("role");
+                Object body = response.getBody();
+                if (body instanceof Map<?, ?> map && map.containsKey("token")) {
+                    String token = Objects.toString(map.get("token"), null);
+                    String role = Objects.toString(map.get("role"), "");
+                    if (token == null || token.isBlank()) {
+                        model.addAttribute("errorMessage", "Failed to retrieve token");
+                        return "login";
+                    }
                     redirectAttributes.addFlashAttribute("successMessage", "Login successful!");
                     
                     // Redirect based on role
