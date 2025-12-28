@@ -1,0 +1,137 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: nblb-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-rootpass}
+    ports:
+      - "${MYSQL_HOST_PORT:-3307}:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./docker/mysql/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-p${MYSQL_ROOT_PASSWORD:-rootpass}"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+
+  discovery:
+    build:
+      context: ./discovery
+      dockerfile: Dockerfile
+    container_name: nblb-discovery
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    ports:
+      - "8761:8761"
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+  auth-service:
+    build:
+      context: ./auth-service
+      dockerfile: Dockerfile
+    container_name: nblb-auth
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      MYSQL_HOST: mysql
+      MYSQL_PORT: 3306
+      MYSQL_USER: root
+      MYSQL_PASSWORD: ${MYSQL_ROOT_PASSWORD:-rootpass}
+      JWT_SECRET: ${JWT_SECRET:-your-very-secure-jwt-secret-key-that-is-at-least-256-bits-long-change-this-in-production}
+      JWT_EXPIRATION: ${JWT_EXPIRATION:-86400000}
+      EUREKA_DEFAULT_ZONE: http://discovery:8761/eureka/
+      GATEWAY_URL: http://gateway:8222
+    ports:
+      - "8090:8090"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      discovery:
+        condition: service_started
+    restart: unless-stopped
+
+  order-service:
+    build:
+      context: ./order-service
+      dockerfile: Dockerfile
+    container_name: nblb-order
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      MYSQL_HOST: mysql
+      MYSQL_PORT: 3306
+      MYSQL_USER: root
+      MYSQL_PASSWORD: ${MYSQL_ROOT_PASSWORD:-rootpass}
+      JWT_SECRET: ${JWT_SECRET:-your-very-secure-jwt-secret-key-that-is-at-least-256-bits-long-change-this-in-production}
+      JWT_EXPIRATION: ${JWT_EXPIRATION:-86400000}
+      EUREKA_DEFAULT_ZONE: http://discovery:8761/eureka/
+      GATEWAY_URL: http://gateway:8222
+    ports:
+      - "8091:8091"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      discovery:
+        condition: service_started
+    restart: unless-stopped
+
+  payment:
+    build:
+      context: ./payment
+      dockerfile: Dockerfile
+    container_name: nblb-payment
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      MYSQL_HOST: mysql
+      MYSQL_PORT: 3306
+      MYSQL_USER: root
+      MYSQL_PASSWORD: ${MYSQL_ROOT_PASSWORD:-rootpass}
+      JWT_SECRET: ${JWT_SECRET:-your-very-secure-jwt-secret-key-that-is-at-least-256-bits-long-change-this-in-production}
+      JWT_EXPIRATION: ${JWT_EXPIRATION:-86400000}
+      EUREKA_DEFAULT_ZONE: http://discovery:8761/eureka/
+      GATEWAY_URL: http://gateway:8222
+      STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY:-}
+    ports:
+      - "8092:8092"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      discovery:
+        condition: service_started
+    restart: unless-stopped
+
+  gateway:
+    build:
+      context: ./gateway
+      dockerfile: Dockerfile
+    container_name: nblb-gateway
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      EUREKA_DEFAULT_ZONE: http://discovery:8761/eureka/
+    ports:
+      - "8222:8222"
+    depends_on:
+      discovery:
+        condition: service_started
+      auth-service:
+        condition: service_started
+      order-service:
+        condition: service_started
+      payment:
+        condition: service_started
+    restart: unless-stopped
+
+  front:
+    build:
+      context: ./Front
+      dockerfile: Dockerfile
+    container_name: nblb-front
+    ports:
+      - "5500:80"
+    depends_on:
+      gateway:
+        condition: service_started
+
+volumes:
+  mysql_data:
