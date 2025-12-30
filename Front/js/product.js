@@ -60,7 +60,11 @@ function attachAddToCart(container) {
       price: parseFloat(btn.dataset.price) || 0,
       imageUrl: btn.dataset.image || ''
     });
-    alert('Produit ajouté au panier');
+
+    // Show notification if available, otherwise silent
+    if (typeof showCartMessage === 'function') {
+      showCartMessage('Produit ajouté au panier');
+    }
   });
 }
 

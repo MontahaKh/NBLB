@@ -2,267 +2,231 @@
 <html lang="en">
 
 <head>
-    <meta charset="utf-8">
-    <title>Foody - Organic Food Website Template</title>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <meta content="" name="keywords">
-    <meta content="" name="description">
+  <meta charset="utf-8">
+  <title>About Us - NBLB Market</title>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="" name="keywords">
+  <meta content="" name="description">
 
-    <!-- Favicon -->
-    <link href="img/favicon.ico" rel="icon">
+  <!-- Favicon -->
+  <link href="img/favicon.ico" rel="icon">
 
-    <!-- Google Web Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500&family=Lora:wght@600;700&display=swap" rel="stylesheet"> 
+  <!-- Google Web Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500&family=Lora:wght@600;700&display=swap"
+    rel="stylesheet">
 
-    <!-- Icon Font Stylesheet -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+  <!-- Icon Font Stylesheet -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
 
-    <!-- Libraries Stylesheet -->
-    <link href="lib/animate/animate.min.css" rel="stylesheet">
-    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+  <!-- Libraries Stylesheet -->
+  <link href="lib/animate/animate.min.css" rel="stylesheet">
+  <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
 
-    <!-- Customized Bootstrap Stylesheet -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
+  <!-- Customized Bootstrap Stylesheet -->
+  <link href="css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Template Stylesheet -->
-    <link href="css/style.css" rel="stylesheet">
+  <!-- Template Stylesheet -->
+  <link href="css/style.css" rel="stylesheet">
 </head>
 
 <body>
-    <!-- Spinner Start -->
-    <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
-        <div class="spinner-border text-primary" role="status"></div>
-    </div>
-    <!-- Spinner End -->
+  <!-- Spinner Start -->
+  <div id="spinner"
+    class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+    <div class="spinner-border text-primary" role="status"></div>
+  </div>
+  <!-- Spinner End -->
 
+  <!-- Navbar Placeholder - populated by navbar.js -->
+  <div id="navbar-placeholder"></div>
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/auth-utils.js"></script>
+  <script src="js/navbar.js"></script>
 
-    <!-- Navbar Start -->
-    <div class="container-fluid fixed-top px-0 wow fadeIn" data-wow-delay="0.1s">
-        <div class="top-bar row gx-0 align-items-center d-none d-lg-flex">
-            <div class="col-lg-6 px-5 text-start">
-                <small><i class="fa fa-map-marker-alt me-2"></i>123 Street, New York, USA</small>
-                <small class="ms-4"><i class="fa fa-envelope me-2"></i>info@example.com</small>
-            </div>
-            <div class="col-lg-6 px-5 text-end">
-                <small>Follow us:</small>
-                <a class="text-body ms-3" href=""><i class="fab fa-facebook-f"></i></a>
-                <a class="text-body ms-3" href=""><i class="fab fa-twitter"></i></a>
-                <a class="text-body ms-3" href=""><i class="fab fa-linkedin-in"></i></a>
-                <a class="text-body ms-3" href=""><i class="fab fa-instagram"></i></a>
-            </div>
-        </div>
-
-        <nav class="navbar navbar-expand-lg navbar-light py-lg-0 px-lg-5 wow fadeIn" data-wow-delay="0.1s">
-            <a href="index.html" class="navbar-brand ms-4 ms-lg-0">
-                <h1 class="fw-bold text-primary m-0">F<span class="text-secondary">oo</span>dy</h1>
-            </a>
-            <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarCollapse">
-                <div class="navbar-nav ms-auto p-4 p-lg-0">
-                    <a href="index.html" class="nav-item nav-link">Home</a>
-                    <a href="about.html" class="nav-item nav-link active">About Us</a>
-                    <a href="product.html" class="nav-item nav-link">Products</a>
-                   
-                    <a href="contact.html" class="nav-item nav-link">Contact Us</a>
-                </div>
-                <div class="d-none d-lg-flex ms-2">
-                    <a class="btn-sm-square bg-white rounded-circle ms-3" href="">
-                        <small class="fa fa-search text-body"></small>
-                    </a>
-                    <a class="btn-sm-square bg-white rounded-circle ms-3" href="">
-                        <small class="fa fa-user text-body"></small>
-                    </a>
-                    <a class="btn-sm-square bg-white rounded-circle ms-3" href="">
-                        <small class="fa fa-shopping-bag text-body"></small>
-                    </a>
-                </div>
-            </div>
-        </nav>
-    </div>
-    <!-- Navbar End -->
-
-
-    <!-- Page Header Start -->
-    <div class="container-fluid page-header mb-5 wow fadeIn" data-wow-delay="0.1s">
-        <div class="container">
-            <h1 class="display-3 mb-3 animated slideInDown">About Us</h1>
-            <nav aria-label="breadcrumb animated slideInDown">
-                <ol class="breadcrumb mb-0">
-                    <li class="breadcrumb-item"><a class="text-body" href="#">Home</a></li>
-                    <li class="breadcrumb-item"><a class="text-body" href="#">Pages</a></li>
-                    <li class="breadcrumb-item text-dark active" aria-current="page">About Us</li>
-                </ol>
-            </nav>
-        </div>
-    </div>
-    <!-- Page Header End -->
-
-
-    <!-- About Start -->
-<div class="container-xxl py-5">
-  <div class="container">
-    <div class="row g-5 align-items-center">
-      <div class="col-lg-6 wow fadeIn" data-wow-delay="0.1s">
-        <div class="about-img position-relative overflow-hidden p-5 pe-0">
-          <!-- Remplace l'image par une photo plus générale de marché -->
-          <img class="img-fluid w-100" src="img/about-market.jpg" alt="NBLB Market">
-        </div>
-      </div>
-      <div class="col-lg-6 wow fadeIn" data-wow-delay="0.5s">
-        <h1 class="display-5 mb-4">Your Online Multi‑Vendor Market</h1>
-        <p class="mb-4">
-          NBLB Market est une plateforme où les vendeurs publient leurs produits
-          alimentaires et non alimentaires, et où les clients peuvent commander en
-          ligne avec un paiement sécurisé.
-        </p>
-        <p><i class="fa fa-check text-primary me-3"></i>Fruits & légumes, produits laitiers, viande, surgelés, boissons, entretien maison…</p>
-        <p><i class="fa fa-check text-primary me-3"></i>Espace vendeur pour gérer les produits, les stocks et les commandes</p>
-        <p><i class="fa fa-check text-primary me-3"></i>Processus de commande complet : panier, paiement et suivi</p>
-        <a class="btn btn-primary rounded-pill py-3 px-5 mt-3" href="product.html">Découvrir les produits</a>
-      </div>
+  <!-- Page Header Start -->
+  <div class="container-fluid page-header mb-5 wow fadeIn" data-wow-delay="0.1s">
+    <div class="container">
+      <h1 class="display-3 mb-3 animated slideInDown">About Us</h1>
+      <nav aria-label="breadcrumb animated slideInDown">
+        <ol class="breadcrumb mb-0">
+          <li class="breadcrumb-item"><a class="text-body" href="#">Home</a></li>
+          <li class="breadcrumb-item"><a class="text-body" href="#">Pages</a></li>
+          <li class="breadcrumb-item text-dark active" aria-current="page">About Us</li>
+        </ol>
+      </nav>
     </div>
   </div>
-</div>
-<!-- About End -->
-
-   <!-- Call To Action Start -->
-<div class="container-fluid bg-primary text-white my-5 py-5">
-  <div class="container py-5">
-    <div class="row g-5 align-items-center">
-      <div class="col-lg-8">
-        <h1 class="display-4 text-white mb-3">Rejoignez NBLB Market</h1>
-        <p class="mb-0">
-          Créez un compte vendeur pour publier vos produits, ou connectez-vous
-          comme client pour faire vos courses en ligne : fruits, légumes, surgelés,
-          boissons et articles de maison.
-        </p>
-      </div>
-      <div class="col-lg-4 text-lg-end">
-        <a href="register.html" class="btn btn-light py-3 px-5 rounded-pill mb-2">
-          Devenir vendeur
-        </a><br>
-        <a href="login.html" class="btn btn-outline-light py-3 px-5 rounded-pill">
-          Se connecter
-        </a>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- Call To Action End -->
+  <!-- Page Header End -->
 
 
-  
-    <!-- Features Start -->
-<div class="container-xxl py-5">
-  <div class="container">
-    <div class="text-center mx-auto mb-5" style="max-width: 500px;">
-      <h1 class="display-5 mb-3">Our Features</h1>
-      <p>Une plateforme microservices pour connecter vendeurs et clients autour d’un marché en ligne complet.</p>
-    </div>
-    <div class="row g-4">
-      <!-- Feature 1 : Multi-vendeurs -->
-      <div class="col-lg-4 col-md-6">
-        <div class="feature-item bg-light p-4 text-center h-100">
-          <div class="feature-icon mb-3">
-            <i class="fa fa-store fa-3x text-success"></i>
+  <!-- About Start -->
+  <div class="container-xxl py-5">
+    <div class="container">
+      <div class="row g-5 align-items-center">
+        <div class="col-lg-6 wow fadeIn" data-wow-delay="0.1s">
+          <div class="about-img position-relative overflow-hidden p-5 pe-0">
+            <!-- Remplace l'image par une photo plus générale de marché -->
+            <img class="img-fluid w-100" src="img/about-market.jpg" alt="NBLB Market">
           </div>
-          <h4 class="mb-3">Multi‑Vendor Shop</h4>
-          <p class="mb-4">
-            Chaque vendeur gère ses produits, ses stocks et ses commandes depuis un espace dédié.
-          </p>
-          <a class="btn btn-outline-success rounded-pill py-2 px-4" href="product.html">Voir les produits</a>
         </div>
-      </div>
-
-      <!-- Feature 2 : Panier & Commandes -->
-      <div class="col-lg-4 col-md-6">
-        <div class="feature-item bg-light p-4 text-center h-100">
-          <div class="feature-icon mb-3">
-            <i class="fa fa-shopping-cart fa-3x text-success"></i>
-          </div>
-          <h4 class="mb-3">Panier & Commandes</h4>
+        <div class="col-lg-6 wow fadeIn" data-wow-delay="0.5s">
+          <h1 class="display-5 mb-4">Your Online Multi‑Vendor Market</h1>
           <p class="mb-4">
-            Les clients ajoutent des articles au panier, valident la commande et suivent son statut en temps réel.
+            NBLB Market est une plateforme où les vendeurs publient leurs produits
+            alimentaires et non alimentaires, et où les clients peuvent commander en
+            ligne avec un paiement sécurisé.
           </p>
-          <a class="btn btn-outline-success rounded-pill py-2 px-4" href="product.html">Commencer</a>
-        </div>
-      </div>
-
-      <!-- Feature 3 : Paiement sécurisé -->
-      <div class="col-lg-4 col-md-6">
-        <div class="feature-item bg-light p-4 text-center h-100">
-          <div class="feature-icon mb-3">
-            <i class="fa fa-credit-card fa-3x text-success"></i>
-          </div>
-          <h4 class="mb-3">Secure Payment</h4>
-          <p class="mb-4">
-            Service de paiement séparé qui traite les transactions et sécurise les données clients.
-          </p>
-          <a class="btn btn-outline-success rounded-pill py-2 px-4" href="contact.html">En savoir plus</a>
+          <p><i class="fa fa-check text-primary me-3"></i>Fruits & légumes, produits laitiers, viande, surgelés,
+            boissons, entretien maison…</p>
+          <p><i class="fa fa-check text-primary me-3"></i>Espace vendeur pour gérer les produits, les stocks et les
+            commandes</p>
+          <p><i class="fa fa-check text-primary me-3"></i>Processus de commande complet : panier, paiement et suivi</p>
+          <a class="btn btn-primary rounded-pill py-3 px-5 mt-3" href="product.html">Découvrir les produits</a>
         </div>
       </div>
     </div>
   </div>
-</div>
-<!-- Features End -->
+  <!-- About End -->
 
-
-    <!-- Footer Start -->
-<div class="container-fluid bg-dark footer mt-5 pt-5 wow fadeIn" data-wow-delay="0.1s">
-  <div class="container py-5">
-    <div class="row g-5">
-      <!-- Col 1 : Logo + description -->
-      <div class="col-lg-3 col-md-6">
-        <h1 class="fw-bold text-primary mb-4">N<span class="text-secondary">BLB</span> Market</h1>
-        <p>
-          Plateforme de marché en ligne basée sur une architecture microservices :
-          vendeurs multiples, gestion des commandes et paiement sécurisé.
-        </p>
-        <div class="d-flex pt-2">
-          <a class="btn btn-square btn-outline-light rounded-circle me-1" href="#"><i class="fab fa-twitter"></i></a>
-          <a class="btn btn-square btn-outline-light rounded-circle me-1" href="#"><i class="fab fa-facebook-f"></i></a>
-          <a class="btn btn-square btn-outline-light rounded-circle me-1" href="#"><i class="fab fa-youtube"></i></a>
-          <a class="btn btn-square btn-outline-light rounded-circle me-0" href="#"><i class="fab fa-linkedin-in"></i></a>
+  <!-- Call To Action Start -->
+  <div class="container-fluid bg-primary text-white my-5 py-5">
+    <div class="container py-5">
+      <div class="row g-5 align-items-center">
+        <div class="col-lg-8">
+          <h1 class="display-4 text-white mb-3">Rejoignez NBLB Market</h1>
+          <p class="mb-0">
+            Créez un compte vendeur pour publier vos produits, ou connectez-vous
+            comme client pour faire vos courses en ligne : fruits, légumes, surgelés,
+            boissons et articles de maison.
+          </p>
         </div>
-      </div>
-
-      <!-- Col 2 : Adresse -->
-      <div class="col-lg-3 col-md-6">
-        <h4 class="text-light mb-4">Address</h4>
-        <p><i class="fa fa-map-marker-alt me-3"></i>Rue de l’Indépendance, Ariana, Tunisie</p>
-        <p><i class="fa fa-phone-alt me-3"></i>+216 71 000 000</p>
-        <p><i class="fa fa-envelope me-3"></i>support@nblb-market.tn</p>
-      </div>
-
-      <!-- Col 3 : Liens rapides -->
-      <div class="col-lg-3 col-md-6">
-        <h4 class="text-light mb-4">Quick Links</h4>
-        <a class="btn btn-link" href="about.html">About Us</a>
-        <a class="btn btn-link" href="contact.html">Contact Us</a>
-        <a class="btn btn-link" href="product.html">Our Products</a>
-        <a class="btn btn-link" href="#">Terms & Condition</a>
-        <a class="btn btn-link" href="#">Support</a>
-      </div>
-
-      <!-- Col 4 : Newsletter -->
-      <div class="col-lg-3 col-md-6">
-        <h4 class="text-light mb-4">Newsletter</h4>
-        <p>Recevez les dernières offres et promotions de NBLB Market.</p>
-        <div class="position-relative mx-auto" style="max-width: 400px;">
-          <input class="form-control bg-transparent w-100 py-3 ps-4 pe-5" type="text" placeholder="Your email">
-          <button type="button" class="btn btn-primary py-2 position-absolute top-0 end-0 mt-2 me-2">SignUp</button>
+        <div class="col-lg-4 text-lg-end">
+          <a href="register.html" class="btn btn-light py-3 px-5 rounded-pill mb-2">
+            Devenir vendeur
+          </a><br>
+          <a href="login.html" class="btn btn-outline-light py-3 px-5 rounded-pill">
+            Se connecter
+          </a>
         </div>
       </div>
     </div>
   </div>
+  <!-- Call To Action End -->
 
-  <!-- Si tu veux garder la barre copyright, dé-commente ce bloc -->
-  <!--
+
+
+  <!-- Features Start -->
+  <div class="container-xxl py-5">
+    <div class="container">
+      <div class="text-center mx-auto mb-5" style="max-width: 500px;">
+        <h1 class="display-5 mb-3">Our Features</h1>
+        <p>Une plateforme microservices pour connecter vendeurs et clients autour d’un marché en ligne complet.</p>
+      </div>
+      <div class="row g-4">
+        <!-- Feature 1 : Multi-vendeurs -->
+        <div class="col-lg-4 col-md-6">
+          <div class="feature-item bg-light p-4 text-center h-100">
+            <div class="feature-icon mb-3">
+              <i class="fa fa-store fa-3x text-success"></i>
+            </div>
+            <h4 class="mb-3">Multi‑Vendor Shop</h4>
+            <p class="mb-4">
+              Chaque vendeur gère ses produits, ses stocks et ses commandes depuis un espace dédié.
+            </p>
+            <a class="btn btn-outline-success rounded-pill py-2 px-4" href="product.html">Voir les produits</a>
+          </div>
+        </div>
+
+        <!-- Feature 2 : Panier & Commandes -->
+        <div class="col-lg-4 col-md-6">
+          <div class="feature-item bg-light p-4 text-center h-100">
+            <div class="feature-icon mb-3">
+              <i class="fa fa-shopping-cart fa-3x text-success"></i>
+            </div>
+            <h4 class="mb-3">Panier & Commandes</h4>
+            <p class="mb-4">
+              Les clients ajoutent des articles au panier, valident la commande et suivent son statut en temps réel.
+            </p>
+            <a class="btn btn-outline-success rounded-pill py-2 px-4" href="product.html">Commencer</a>
+          </div>
+        </div>
+
+        <!-- Feature 3 : Paiement sécurisé -->
+        <div class="col-lg-4 col-md-6">
+          <div class="feature-item bg-light p-4 text-center h-100">
+            <div class="feature-icon mb-3">
+              <i class="fa fa-credit-card fa-3x text-success"></i>
+            </div>
+            <h4 class="mb-3">Secure Payment</h4>
+            <p class="mb-4">
+              Service de paiement séparé qui traite les transactions et sécurise les données clients.
+            </p>
+            <a class="btn btn-outline-success rounded-pill py-2 px-4" href="contact.html">En savoir plus</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Features End -->
+
+
+  <!-- Footer Start -->
+  <div class="container-fluid bg-dark footer mt-5 pt-5 wow fadeIn" data-wow-delay="0.1s">
+    <div class="container py-5">
+      <div class="row g-5">
+        <!-- Col 1 : Logo + description -->
+        <div class="col-lg-3 col-md-6">
+          <h1 class="fw-bold text-primary mb-4">N<span class="text-secondary">BLB</span> Market</h1>
+          <p>
+            Plateforme de marché en ligne basée sur une architecture microservices :
+            vendeurs multiples, gestion des commandes et paiement sécurisé.
+          </p>
+          <div class="d-flex pt-2">
+            <a class="btn btn-square btn-outline-light rounded-circle me-1" href="#"><i class="fab fa-twitter"></i></a>
+            <a class="btn btn-square btn-outline-light rounded-circle me-1" href="#"><i
+                class="fab fa-facebook-f"></i></a>
+            <a class="btn btn-square btn-outline-light rounded-circle me-1" href="#"><i class="fab fa-youtube"></i></a>
+            <a class="btn btn-square btn-outline-light rounded-circle me-0" href="#"><i
+                class="fab fa-linkedin-in"></i></a>
+          </div>
+        </div>
+
+        <!-- Col 2 : Adresse -->
+        <div class="col-lg-3 col-md-6">
+          <h4 class="text-light mb-4">Address</h4>
+          <p><i class="fa fa-map-marker-alt me-3"></i>Rue de l’Indépendance, Ariana, Tunisie</p>
+          <p><i class="fa fa-phone-alt me-3"></i>+216 71 000 000</p>
+          <p><i class="fa fa-envelope me-3"></i>support@nblb-market.tn</p>
+        </div>
+
+        <!-- Col 3 : Liens rapides -->
+        <div class="col-lg-3 col-md-6">
+          <h4 class="text-light mb-4">Quick Links</h4>
+          <a class="btn btn-link" href="about.html">About Us</a>
+          <a class="btn btn-link" href="contact.html">Contact Us</a>
+          <a class="btn btn-link" href="product.html">Our Products</a>
+          <a class="btn btn-link" href="#">Terms & Condition</a>
+          <a class="btn btn-link" href="#">Support</a>
+        </div>
+
+        <!-- Col 4 : Newsletter -->
+        <div class="col-lg-3 col-md-6">
+          <h4 class="text-light mb-4">Newsletter</h4>
+          <p>Recevez les dernières offres et promotions de NBLB Market.</p>
+          <div class="position-relative mx-auto" style="max-width: 400px;">
+            <input class="form-control bg-transparent w-100 py-3 ps-4 pe-5" type="text" placeholder="Your email">
+            <button type="button" class="btn btn-primary py-2 position-absolute top-0 end-0 mt-2 me-2">SignUp</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Si tu veux garder la barre copyright, dé-commente ce bloc -->
+    <!--
   <div class="container-fluid copyright">
     <div class="container">
       <div class="row">
@@ -273,24 +237,22 @@
     </div>
   </div>
   -->
-</div>
-<!-- Footer End -->
+  </div>
+  <!-- Footer End -->
 
 
-    <!-- Back to Top -->
-    <a href="#" class="btn btn-lg btn-primary btn-lg-square rounded-circle back-to-top"><i class="bi bi-arrow-up"></i></a>
+  <!-- Back to Top -->
+  <a href="#" class="btn btn-lg btn-primary btn-lg-square rounded-circle back-to-top"><i class="bi bi-arrow-up"></i></a>
 
 
-    <!-- JavaScript Libraries -->
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="lib/wow/wow.min.js"></script>
-    <script src="lib/easing/easing.min.js"></script>
-    <script src="lib/waypoints/waypoints.min.js"></script>
-    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+  <!-- JavaScript Libraries -->
+  <script src="lib/wow/wow.min.js"></script>
+  <script src="lib/easing/easing.min.js"></script>
+  <script src="lib/waypoints/waypoints.min.js"></script>
+  <script src="lib/owlcarousel/owl.carousel.min.js"></script>
 
-    <!-- Template Javascript -->
-    <script src="js/main.js"></script>
+  <!-- Template Javascript -->
+  <script src="js/main.js"></script>
 </body>
 
 </html>

@@ -5,18 +5,34 @@ document.addEventListener('DOMContentLoaded', () => {
     const orderId = params.get('orderId');
     const amount = parseFloat(params.get('amount'));
 
+    console.log('URL Search Params:', window.location.search);
+    console.log('Order ID:', orderId);
+    console.log('Amount (raw):', params.get('amount'));
+    console.log('Amount (parsed):', amount);
+
     if (!orderId || isNaN(amount)) {
-        alert('Missing payment information.');
+        console.error('Missing payment information. orderId:', orderId, 'amount:', amount);
+        // Redirect to cart instead of showing alert
         window.location.href = 'cart.html';
         return;
     }
 
     const amountInput = document.getElementById('paymentAmount');
-    amountInput.value = amount.toFixed(2);
+    if (amountInput) {
+        amountInput.value = amount.toFixed(2);
+        console.log('Amount input set to:', amountInput.value);
+    } else {
+        console.error('paymentAmount input element not found');
+    }
 
     const form = document.getElementById('paymentForm');
     const errorEl = document.getElementById('paymentError');
     const successEl = document.getElementById('paymentSuccess');
+
+    if (!form) {
+        console.error('paymentForm not found');
+        return;
+    }
 
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -27,7 +43,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const token = getToken();
 
         try {
-            const res = await fetch(`${API_BASE}/payment/api/process`, {
+            // Process the payment
+            const paymentRes = await fetch(`${API_BASE}/payment/api/process`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -40,9 +57,41 @@ document.addEventListener('DOMContentLoaded', () => {
                 })
             });
 
-            if (!res.ok) {
+            if (!paymentRes.ok) {
                 errorEl.style.display = 'block';
                 return;
+            }
+
+            // After successful payment, reduce stock for each item in the cart
+            try {
+                const cart = JSON.parse(localStorage.getItem('cart')) || [];
+                if (cart && cart.length > 0) {
+                    // Send stock reduction request to backend
+                    const stockRes = await fetch(`${API_BASE}/order-service/api/reduce-stock`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+                        },
+                        body: JSON.stringify({
+                            items: cart.map(item => ({
+                                productId: item.id,
+                                quantity: item.quantity
+                            }))
+                        })
+                    });
+
+                    if (!stockRes.ok) {
+                        console.error('Warning: Stock reduction failed, but payment was successful');
+                        // Continue anyway - payment is more important than stock update
+                    }
+
+                    // Clear the cart after stock reduction attempt
+                    localStorage.removeItem('cart');
+                }
+            } catch (stockErr) {
+                console.error('Error reducing stock:', stockErr);
+                // Continue to orders page - payment was successful
             }
 
             successEl.style.display = 'block';

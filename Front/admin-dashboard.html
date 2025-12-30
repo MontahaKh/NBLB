@@ -1,52 +1,245 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>Admin Dashboard - NBLB Market</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
   <link href="css/bootstrap.min.css" rel="stylesheet">
   <link href="css/style.css" rel="stylesheet">
 </head>
+
 <body>
 
-  <header class="container-fluid fixed-top px-0">
-    <nav class="navbar navbar-expand-lg navbar-light py-lg-0 px-lg-5 bg-light">
-      <a href="index.html" class="navbar-brand ms-4 ms-lg-0">
-        <h1 class="fw-bold text-primary m-0">NBLB<span class="text-secondary">Market</span></h1>
-      </a>
-      <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarCollapse">
-        <div class="navbar-nav ms-auto p-4 p-lg-0">
-          <a href="index.html" class="nav-item nav-link">Home</a>
-          <a href="product.html" class="nav-item nav-link">Products</a>
-          <a href="orders.html" class="nav-item nav-link">Orders</a>
-        </div>
-        <div class="d-none d-lg-flex ms-2">
-          <div id="userMenu" class="ms-3"></div>
-        </div>
+  <!-- Navbar will be inserted via navbar.js -->
+  <div id="navbar-placeholder"></div>
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/auth-utils.js"></script>
+  <script src="js/navbar.js"></script>
+
+  <main class="page-wrapper">
+    <div class="container-fluid">
+      <div class="row">
+        <!-- Sidebar Navigation -->
+        <aside class="col-lg-3 col-md-4 mb-4">
+          <div class="list-group nav-sidebar">
+            <span class="list-group-item list-group-item-action active" data-section="overview">
+              <i class="fa fa-tachometer-alt me-2"></i> Dashboard Overview
+            </span>
+            <a href="#" class="list-group-item list-group-item-action" data-section="users">
+              <i class="fa fa-users me-2"></i> Users Management
+            </a>
+            <a href="#" class="list-group-item list-group-item-action" data-section="sellers">
+              <i class="fa fa-store me-2"></i> Sellers Management
+            </a>
+            <a href="#" class="list-group-item list-group-item-action" data-section="products">
+              <i class="fa fa-box me-2"></i> Products Management
+            </a>
+            <a href="#" class="list-group-item list-group-item-action" data-section="orders">
+              <i class="fa fa-shopping-cart me-2"></i> Orders Management
+            </a>
+            <a href="#" class="list-group-item list-group-item-action" data-section="reports">
+              <i class="fa fa-chart-bar me-2"></i> Reports & Analytics
+            </a>
+            <a href="#" class="list-group-item list-group-item-action" data-section="settings">
+              <i class="fa fa-cog me-2"></i> System Settings
+            </a>
+          </div>
+        </aside>
+
+        <!-- Main Content -->
+        <section class="col-lg-9 col-md-8">
+          <h2 class="mb-4"><i class="fa fa-shield-alt me-2"></i>Admin Dashboard</h2>
+
+          <!-- Overview Tab -->
+          <div class="section-content" id="overview-section">
+            <div class="row g-4 mb-4">
+              <div class="col-md-3">
+                <div class="dashboard-card admin-card">
+                  <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                      <div>
+                        <p class="text-muted mb-2">Total Users</p>
+                        <h3 class="mb-0" id="totalUsers">---</h3>
+                      </div>
+                      <i class="fa fa-users fa-2x text-danger opacity-50"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="dashboard-card admin-card">
+                  <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                      <div>
+                        <p class="text-muted mb-2">Total Sellers</p>
+                        <h3 class="mb-0" id="totalSellers">---</h3>
+                      </div>
+                      <i class="fa fa-store fa-2x text-warning opacity-50"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="dashboard-card admin-card">
+                  <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                      <div>
+                        <p class="text-muted mb-2">Total Orders</p>
+                        <h3 class="mb-0" id="totalOrders">---</h3>
+                      </div>
+                      <i class="fa fa-shopping-cart fa-2x text-info opacity-50"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="dashboard-card admin-card">
+                  <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                      <div>
+                        <p class="text-muted mb-2">Total Revenue</p>
+                        <h3 class="mb-0" id="totalRevenue">---</h3>
+                      </div>
+                      <i class="fa fa-dollar-sign fa-2x text-success opacity-50"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="alert alert-info">
+              <i class="fa fa-info-circle me-2"></i>
+              <strong>Welcome Admin!</strong> Use the sidebar navigation to manage users, sellers, products, and orders.
+              Monitor platform activity and generate reports.
+            </div>
+          </div>
+
+          <!-- Users Management Tab -->
+          <div class="section-content d-none" id="users-section">
+            <h4 class="mb-3"><i class="fa fa-users me-2"></i>Users Management</h4>
+            <div class="table-responsive">
+              <table class="table table-dashboard table-hover">
+                <thead>
+                  <tr>
+                    <th>User ID</th>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="usersTable">
+                  <tr>
+                    <td colspan="6" class="text-center text-muted">Loading users...</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Products Management Tab -->
+          <div class="section-content d-none" id="products-section">
+            <h4 class="mb-3"><i class="fa fa-box me-2"></i>Products Management</h4>
+            <div class="table-responsive">
+              <table class="table table-dashboard table-hover">
+                <thead>
+                  <tr>
+                    <th>Product ID</th>
+                    <th>Name</th>
+                    <th>Seller</th>
+                    <th>Category</th>
+                    <th>Price</th>
+                    <th>Stock</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="productsTable">
+                  <tr>
+                    <td colspan="7" class="text-center text-muted">Loading products...</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Orders Management Tab -->
+          <div class="section-content d-none" id="orders-section">
+            <h4 class="mb-3"><i class="fa fa-shopping-cart me-2"></i>Orders Management</h4>
+            <div class="table-responsive">
+              <table class="table table-dashboard table-hover">
+                <thead>
+                  <tr>
+                    <th>Order ID</th>
+                    <th>Customer</th>
+                    <th>Date</th>
+                    <th>Total</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="ordersTable">
+                  <tr>
+                    <td colspan="6" class="text-center text-muted">Loading orders...</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Reports Tab -->
+          <div class="section-content d-none" id="reports-section">
+            <h4 class="mb-3"><i class="fa fa-chart-bar me-2"></i>Reports & Analytics</h4>
+            <div class="alert alert-info">
+              <i class="fa fa-chart-line me-2"></i>
+              Analytics and reports section coming soon.
+            </div>
+          </div>
+
+          <!-- Settings Tab -->
+          <div class="section-content d-none" id="settings-section">
+            <h4 class="mb-3"><i class="fa fa-cog me-2"></i>System Settings</h4>
+            <div class="alert alert-info">
+              <i class="fa fa-sliders-h me-2"></i>
+              System settings panel coming soon.
+            </div>
+          </div>
+        </section>
       </div>
-    </nav>
-  </header>
-
-  <main class="container" style="margin-top:120px; margin-bottom:60px;">
-    <h2 class="mb-3">Admin Dashboard</h2>
-    <p class="text-muted">Cette page est réservée au rôle ADMIN.</p>
-
-    <div class="list-group">
-      <a class="list-group-item list-group-item-action" href="seller-dashboard.html">All Products (via Seller view)</a>
-      <a class="list-group-item list-group-item-action" href="orders.html">All Orders</a>
     </div>
   </main>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="js/auth-utils.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function () {
       requireAdmin();
+
+      // Handle sidebar navigation
+      document.querySelectorAll('.nav-sidebar a, .nav-sidebar span').forEach(link => {
+        link.addEventListener('click', function (e) {
+          e.preventDefault();
+          const sectionId = this.getAttribute('data-section');
+
+          // Update active state
+          document.querySelectorAll('.nav-sidebar a, .nav-sidebar span').forEach(item => {
+            item.classList.remove('active');
+          });
+          this.classList.add('active');
+
+          // Show/hide sections
+          document.querySelectorAll('.section-content').forEach(section => {
+            section.classList.add('d-none');
+          });
+          const targetSection = document.getElementById(sectionId + '-section');
+          if (targetSection) {
+            targetSection.classList.remove('d-none');
+          }
+        });
+      });
     });
   </script>
 </body>
+
 </html>

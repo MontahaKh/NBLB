@@ -1,41 +1,124 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>Seller Dashboard - NBLB Market</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
   <link href="css/bootstrap.min.css" rel="stylesheet">
   <link href="css/style.css" rel="stylesheet">
 </head>
+
 <body>
 
-  <!-- Navbar -->
-  <header class="container-fluid fixed-top px-0">
-    <!-- ... navbar ... -->
-  </header>
+  <!-- Navbar will be inserted via navbar.js -->
+  <div id="navbar-placeholder"></div>
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/auth-utils.js"></script>
+  <script src="js/navbar.js"></script>
 
-  <main class="container-fluid" style="margin-top:120px; margin-bottom:60px;">
-    <div class="row">
-      <!-- Menu gauche -->
-      <aside class="col-lg-3 col-md-4 mb-4">
-        <div class="list-group">
-          <span class="list-group-item list-group-item-action active">Seller Dashboard</span>
-          <a href="#tab-products" class="list-group-item list-group-item-action" data-bs-toggle="tab">My Products</a>
-          <a href="#tab-add" class="list-group-item list-group-item-action" data-bs-toggle="tab">Add Product</a>
-          <a href="#tab-orders" class="list-group-item list-group-item-action" data-bs-toggle="tab">Orders</a>
-        </div>
-      </aside>
+  <main class="page-wrapper">
+    <div class="container-fluid">
+      <div class="row">
+        <!-- Sidebar Navigation -->
+        <aside class="col-lg-3 col-md-4 mb-4">
+          <div class="list-group nav-sidebar">
+            <span class="list-group-item list-group-item-action active" data-section="dashboard">
+              <i class="fa fa-chart-line me-2"></i> Dashboard
+            </span>
+            <a href="#" class="list-group-item list-group-item-action" data-section="products">
+              <i class="fa fa-box me-2"></i> My Products
+            </a>
+            <a href="#" class="list-group-item list-group-item-action" data-section="add-product">
+              <i class="fa fa-plus-circle me-2"></i> Add Product
+            </a>
+            <a href="#" class="list-group-item list-group-item-action" data-section="orders">
+              <i class="fa fa-shopping-cart me-2"></i> Orders
+            </a>
+            <a href="#" class="list-group-item list-group-item-action" data-section="analytics">
+              <i class="fa fa-chart-bar me-2"></i> Analytics
+            </a>
+            <a href="#" class="list-group-item list-group-item-action" data-section="settings">
+              <i class="fa fa-cog me-2"></i> Settings
+            </a>
+          </div>
+        </aside>
 
-      <!-- Contenu -->
-      <section class="col-lg-9 col-md-8">
-        <div class="tab-content">
+        <!-- Main Content -->
+        <section class="col-lg-9 col-md-8">
+          <h2 class="mb-4"><i class="fa fa-store me-2"></i>Seller Dashboard</h2>
 
-          <!-- Onglet produits -->
-          <div class="tab-pane fade show active" id="tab-products">
-            <h2 class="mb-3">My Products</h2>
+          <!-- Dashboard Overview -->
+          <div class="section-content" id="dashboard-section">
+            <div class="row g-4 mb-4">
+              <div class="col-md-3">
+                <div class="dashboard-card seller-card">
+                  <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                      <div>
+                        <p class="text-muted mb-2">Total Products</p>
+                        <h3 class="mb-0" id="totalProducts">---</h3>
+                      </div>
+                      <i class="fa fa-box fa-2x text-warning opacity-50"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="dashboard-card seller-card">
+                  <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                      <div>
+                        <p class="text-muted mb-2">Orders</p>
+                        <h3 class="mb-0" id="totalSellerOrders">---</h3>
+                      </div>
+                      <i class="fa fa-shopping-cart fa-2x text-info opacity-50"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="dashboard-card seller-card">
+                  <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                      <div>
+                        <p class="text-muted mb-2">Total Sales</p>
+                        <h3 class="mb-0" id="totalSales">---</h3>
+                      </div>
+                      <i class="fa fa-dollar-sign fa-2x text-success opacity-50"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="dashboard-card seller-card">
+                  <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                      <div>
+                        <p class="text-muted mb-2">Avg Rating</p>
+                        <h3 class="mb-0" id="avgRating">---</h3>
+                      </div>
+                      <i class="fa fa-star fa-2x text-warning opacity-50"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="alert alert-info">
+              <i class="fa fa-info-circle me-2"></i>
+              <strong>Welcome to your Seller Dashboard!</strong> Manage your products, monitor orders, and track your
+              sales performance.
+            </div>
+          </div>
+
+          <!-- Products List Tab -->
+          <div class="section-content d-none" id="products-section">
+            <h4 class="mb-3"><i class="fa fa-box me-2"></i>My Products</h4>
             <div class="table-responsive">
-              <table class="table table-striped align-middle">
+              <table class="table table-dashboard table-hover">
                 <thead>
                   <tr>
                     <th>ID</th>
@@ -43,111 +126,170 @@
                     <th>Category</th>
                     <th>Price</th>
                     <th>Quantity</th>
+                    <th>Status</th>
+                    <th>Actions</th>
                   </tr>
                 </thead>
                 <tbody id="sellerProducts">
-                  <!-- rempli par seller.js -->
+                  <tr>
+                    <td colspan="7" class="text-center text-muted">Loading products...</td>
+                  </tr>
                 </tbody>
               </table>
             </div>
           </div>
 
-          <!-- Onglet ajout produit -->
-          <div class="tab-pane fade" id="tab-add">
-            <h2 class="mb-3">Add New Product</h2>
+          <!-- Add Product Tab -->
+          <div class="section-content d-none" id="add-product-section">
+            <h4 class="mb-3"><i class="fa fa-plus-circle me-2"></i>Add New Product</h4>
 
-            <form id="addProductForm" class="card p-4 shadow-sm">
-              <div class="mb-3">
-                <label for="productName" class="form-label">Product Name</label>
-                <input id="productName" type="text" class="form-control" required>
+            <form id="addProductForm" class="dashboard-form">
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label for="productName" class="form-label">Product Name <span class="text-danger">*</span></label>
+                  <input id="productName" type="text" class="form-control" required>
+                </div>
+
+                <div class="col-md-6">
+                  <label for="category" class="form-label">Category <span class="text-danger">*</span></label>
+                  <select id="category" class="form-select" required>
+                    <option value="">Select a category</option>
+                    <option value="FRESH_PRODUCE">Fruits & Légumes frais</option>
+                    <option value="DAIRY_PRODUCTS">Produits laitiers</option>
+                    <option value="MEAT_AND_SEAFOOD">Viande & Poisson</option>
+                    <option value="BAKED_GOODS">Boulangerie & Pâtisserie</option>
+                    <option value="PREPARED_FOODS">Plats préparés</option>
+                    <option value="BEVERAGES">Boissons</option>
+                    <option value="FROZEN_FOODS">Surgelés</option>
+                    <option value="HOUSEHOLD">Entretien maison</option>
+                    <option value="PERSONAL_CARE">Hygiène & Beauté</option>
+                  </select>
+                </div>
+
+                <div class="col-md-6">
+                  <label for="price" class="form-label">Price (DT) <span class="text-danger">*</span></label>
+                  <input id="price" type="number" step="0.01" min="0" class="form-control" required>
+                </div>
+
+                <div class="col-md-6">
+                  <label for="quantity" class="form-label">Quantity <span class="text-danger">*</span></label>
+                  <input id="quantity" type="number" min="1" class="form-control" required>
+                </div>
+
+                <div class="col-md-6">
+                  <label for="expiryDate" class="form-label">Expiry Date</label>
+                  <input id="expiryDate" type="date" class="form-control">
+                </div>
+
+                <div class="col-md-6">
+                  <label for="imageUrl" class="form-label">Image URL</label>
+                  <input id="imageUrl" type="text" class="form-control" placeholder="https://...">
+                </div>
+
+                <div class="col-12">
+                  <label for="description" class="form-label">Description</label>
+                  <textarea id="description" class="form-control" rows="4"></textarea>
+                </div>
+
+                <div class="col-12">
+                  <button type="submit" class="btn btn-primary rounded-pill py-2 px-4">
+                    <i class="fa fa-save me-2"></i> Save Product
+                  </button>
+                  <button type="reset" class="btn btn-secondary rounded-pill py-2 px-4 ms-2">
+                    <i class="fa fa-redo me-2"></i> Clear
+                  </button>
+                </div>
               </div>
-
-              <div class="mb-3">
-                <label for="price" class="form-label">Price (DT)</label>
-                <input id="price" type="number" step="0.01" class="form-control" required>
-              </div>
-
-              <div class="mb-3">
-                <label for="description" class="form-label">Description</label>
-                <textarea id="description" class="form-control" rows="3"></textarea>
-              </div>
-
-              <div class="mb-3">
-                <label for="quantity" class="form-label">Quantity</label>
-                <input id="quantity" type="number" min="1" class="form-control" required>
-              </div>
-
-              <div class="mb-3">
-                <label for="expiryDate" class="form-label">Expiry Date</label>
-                <input id="expiryDate" type="date" class="form-control">
-              </div>
-
-              <div class="mb-3">
-                <label for="category" class="form-label">Category</label>
-                <select id="category" class="form-select" required>
-                  <option value="FRESH_PRODUCE">Fruits & Légumes frais</option>
-                  <option value="DAIRY_PRODUCTS">Produits laitiers</option>
-                  <option value="MEAT_AND_SEAFOOD">Viande & Poisson</option>
-                  <option value="BAKED_GOODS">Boulangerie & Pâtisserie</option>
-                  <option value="PREPARED_FOODS">Plats préparés</option>
-                  <option value="BEVERAGES">Boissons</option>
-                  <option value="FROZEN_FOODS">Surgelés</option>
-                  <option value="HOUSEHOLD">Entretien maison</option>
-                  <option value="PERSONAL_CARE">Hygiène & Beauté</option>
-                </select>
-              </div>
-
-              <div class="mb-3">
-                <label for="imageUrl" class="form-label">Image URL</label>
-                <input id="imageUrl" type="text" class="form-control">
-              </div>
-
-              <button type="submit" class="btn btn-primary w-100">Save Product</button>
-
-              <p id="addProductError" class="text-danger mt-2" style="display:none;">
-                Error while saving the product.
-              </p>
-              <p id="addProductSuccess" class="text-success mt-2" style="display:none;">
-                Product saved successfully.
-              </p>
             </form>
+
+            <div id="addProductSuccess" class="alert alert-success mt-3" role="alert" style="display:none;">
+              <i class="fa fa-check-circle me-2"></i> Product saved successfully!
+            </div>
+            <div id="addProductError" class="alert alert-danger mt-3" role="alert" style="display:none;">
+              <i class="fa fa-exclamation-circle me-2"></i> <span id="addProductErrorMsg">Error while saving the
+                product.</span>
+            </div>
           </div>
 
-          <!-- Onglet commandes (simple placeholder pour l’instant) -->
-          <div class="tab-pane fade" id="tab-orders">
-            <h2 class="mb-3">Orders</h2>
-            <p class="text-muted">Sold products (paid / delivery / shipped).</p>
+          <!-- Orders Tab -->
+          <div class="section-content d-none" id="orders-section">
+            <h4 class="mb-3"><i class="fa fa-shopping-cart me-2"></i>Orders</h4>
             <div class="table-responsive">
-              <table class="table table-striped align-middle">
+              <table class="table table-dashboard table-hover">
                 <thead>
-                <tr>
-                  <th>Order #</th>
-                  <th>Date</th>
-                  <th>Buyer</th>
-                  <th>Product</th>
-                  <th>Unit Price</th>
-                  <th>Status</th>
-                </tr>
+                  <tr>
+                    <th>Order #</th>
+                    <th>Date</th>
+                    <th>Buyer</th>
+                    <th>Product</th>
+                    <th>Qty</th>
+                    <th>Total</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
                 </thead>
                 <tbody id="sellerSales">
-                <tr><td colspan="6" class="text-center">Loading...</td></tr>
+                  <tr>
+                    <td colspan="8" class="text-center text-muted">Loading orders...</td>
+                  </tr>
                 </tbody>
               </table>
             </div>
           </div>
 
-        </div>
-      </section>
+          <!-- Analytics Tab -->
+          <div class="section-content d-none" id="analytics-section">
+            <h4 class="mb-3"><i class="fa fa-chart-bar me-2"></i>Analytics & Reports</h4>
+            <div class="alert alert-info">
+              <i class="fa fa-chart-line me-2"></i>
+              Your sales analytics and reports will appear here.
+            </div>
+          </div>
+
+          <!-- Settings Tab -->
+          <div class="section-content d-none" id="settings-section">
+            <h4 class="mb-3"><i class="fa fa-cog me-2"></i>Store Settings</h4>
+            <div class="alert alert-info">
+              <i class="fa fa-sliders-h me-2"></i>
+              Store settings panel coming soon.
+            </div>
+          </div>
+        </section>
+      </div>
     </div>
   </main>
 
-  <!-- Footer -->
-  <!-- ... -->
-
-  <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-
-  <script src="js/auth-utils.js"></script>
   <script src="js/seller.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      requireSeller();
+
+      // Handle sidebar navigation
+      document.querySelectorAll('.nav-sidebar a, .nav-sidebar span').forEach(link => {
+        link.addEventListener('click', function (e) {
+          if (this.getAttribute('href') === '#') {
+            e.preventDefault();
+          }
+          const sectionId = this.getAttribute('data-section');
+
+          // Update active state
+          document.querySelectorAll('.nav-sidebar a, .nav-sidebar span').forEach(item => {
+            item.classList.remove('active');
+          });
+          this.classList.add('active');
+
+          // Show/hide sections
+          document.querySelectorAll('.section-content').forEach(section => {
+            section.classList.add('d-none');
+          });
+          const targetSection = document.getElementById(sectionId + '-section');
+          if (targetSection) {
+            targetSection.classList.remove('d-none');
+          }
+        });
+      });
+    });
+  </script>
 </body>
+
 </html>
