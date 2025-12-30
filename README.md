@@ -1,18 +1,30 @@
-# NBLB (No Bite Left Behind)
+# NBLB Marketplace
 
-Multi-module Java (Spring Boot) microservices project.
+A full-stack microservices e-commerce platform built with Java Spring Boot backend services and a modern responsive frontend.
 
 ## Overview
 
-This repository contains multiple Spring Boot services organized as modules:
+NBLB is a comprehensive marketplace application featuring role-based access control, product inventory management, shopping cart functionality, and integrated payment processing. The system is organized as a microservices architecture with separate services for authentication, product management, orders, and payments.
 
-- `auth-service` — authentication service
-- `discovery` — service discovery (Eureka/Consul style)
-- `gateway` — API gateway
-- `order-service` — order management
-- `payment` — payment processing
+### Core Components
 
-Each module is a Maven module with its own `pom.xml`.
+**Backend Services:**
+- `auth-service` — User authentication, JWT token management, role-based access control
+- `order-service` — Product catalog, order management, shopping cart operations, inventory management
+- `payment-service` — Payment processing and transaction management
+- `gateway` — API Gateway with CORS configuration and request routing
+- `discovery` — Eureka service discovery for microservices registration
+
+**Frontend:**
+- `Front/` — Modern responsive HTML/CSS/JavaScript SPA with role-based UI components
+
+### Technology Stack
+
+- **Backend:** Java 17, Spring Boot 4.0+, Spring Cloud (Netflix Eureka), JWT authentication
+- **Database:** MySQL 8.0 with unified NBLB_* naming convention (NBLB_USER, NBLB_ORDER, NBLB_PAYMENT)
+- **Frontend:** HTML5, Bootstrap 5, jQuery 3.4.1, Font Awesome 5, WOW.js animations
+- **Containerization:** Docker & Docker Compose
+- **Build:** Maven with wrapper scripts (mvnw/mvnw.cmd)
 
 ## Prerequisites
 
@@ -45,32 +57,75 @@ powershell -ExecutionPolicy Bypass -File .\start-backend.ps1
 
 This starts (in order): `discovery` (8761) → `gateway` (8222) → `auth-service` (8090) → `order-service` (8091) → `payment` (8092).
 
-## Frontend (static HTML/JS)
+## Frontend Features
 
-The `Front/` folder is a static frontend (plain HTML/CSS/JS). To test it reliably, serve it via a local HTTP server (avoid opening HTML files directly with `file://`).
+The NBLB frontend is a responsive, single-page application with:
 
-### Option A: PowerShell (no dependencies)
+- **User Authentication** — Login/Register with JWT token management
+- **Role-Based Navigation** — Different UI for Admin, Seller, and Customer roles
+- **Product Management** — Browse products with expiry date indicators and stock status
+- **Shopping Cart** — Full cart management with product images, quantity adjustment, and real-time updates
+- **Order Management** — Track orders and payment status
+- **Dashboard Pages** — Role-specific dashboards for administrators and sellers
+- **Unified Navbar** — Dynamic navigation component with role-based visibility and cart badge
+- **Toast Notifications** — Professional in-app notifications replacing browser alerts
+- **Responsive Design** — Mobile-friendly layout with Bootstrap 5
+
+### Running Frontend Locally
+
+#### Option A: PowerShell Server
 
 ```powershell
 cd .\Front
 powershell -ExecutionPolicy Bypass -File .\serve.ps1 -Port 5500
 ```
 
-Then open:
+Then visit: http://localhost:5500/
 
-- http://localhost:5500/index.html
+#### Option B: Python Server
+
+```powershell
+cd .\Front
+py -m http.server 5500
+```
+
+Then visit: http://localhost:5500/
+
+## Frontend (static HTML/JS)
+
+The `Front/` folder is a static frontend (plain HTML/CSS/JS). To test it reliably, serve it via a local HTTP server (avoid opening HTML files directly with `file://`).
+
+## Database Configuration
+
+The project uses a unified database naming convention: **NBLB_\***
+
+- `NBLB_USER` — User accounts and authentication data (auth-service)
+- `NBLB_ORDER` — Products, orders, and inventory (order-service)
+- `NBLB_PAYMENT` — Payment transactions (payment-service)
+
+Each service maintains its own database for data isolation per microservices architecture principles.
+
+### Database Initialization
+
+The `docker/mysql/init.sql` script automatically creates all required databases and initial schemas when using Docker Compose.
+
+For local development, ensure your MySQL instance creates the NBLB_* databases and configure each service's `application.properties` with the correct connection string.
 
 ## Docker (recommended for Ops)
 
-This repo includes a `docker-compose.yml` that starts:
+This repo includes a `docker-compose.yml` that orchestrates the complete stack:
 
-- MySQL (exposed on host port `3307` by default)
-- `discovery` (`8761`)
-- `gateway` (`8222`)
-- `auth-service` (`8090`)
-- `order-service` (`8091`)
-- `payment` (`8092`)
-- `front` (Nginx, exposed on `5500`)
+- **MySQL 8.0** (port `3307`) — Database server with NBLB_* databases
+- **Eureka Discovery** (port `8761`) — Service registry and discovery
+- **API Gateway** (port `8222`) — Central entry point for all API requests
+- **Auth Service** (port `8090`) — User authentication and JWT management
+- **Order Service** (port `8091`) — Product and order management
+- **Payment Service** (port `8092`) — Payment processing
+- **Frontend (Nginx)** (port `5500`) — Static frontend served via Nginx
+
+### Container Networking
+
+All services communicate through Docker's internal network. The `init.sql` script runs on MySQL startup to initialize all databases with the unified NBLB_* naming scheme.
 
 ### Prerequisites (Windows)
 
@@ -137,6 +192,83 @@ Then open:
 
 - http://localhost:5500/index.html
 
+## Key Features & Implementation
+
+### Authentication & Authorization
+- JWT token-based authentication with role support (ADMIN, SELLER, CLIENT)
+- Secure password handling and token refresh mechanisms
+- Role-specific dashboard and navigation controls
+
+### Product Management
+- Product catalog with search and filtering
+- Inventory tracking with real-time stock status
+- Expiry date management with color-coded freshness indicators (Green: 7+ days, Orange: 4-7 days, Yellow: 1-3 days, Red: Expired)
+- Product image management with optimized display
+
+### Shopping Cart
+- Real-time cart updates with persistence in localStorage
+- Dynamic cart badge displaying item count
+- Product thumbnails in cart for visual confirmation
+- Quantity management and item removal
+- Automatic stock reduction after successful payment
+
+### Order Management
+- Order creation from cart checkout
+- Order tracking and history
+- Integration with payment service
+- Stock deduction on payment completion
+
+### Payment Processing
+- Multiple payment methods support (Card, Cash on Delivery, Wallet)
+- Post-payment stock reduction mechanism
+- Payment status tracking
+- Order confirmation and redirect to orders page
+
+### User Interface
+- Role-based navigation and dashboards
+- Unified responsive navbar component
+- Professional toast notifications (replacing browser alerts)
+- Mobile-friendly Bootstrap 5 design
+- Admin and Seller dashboard interfaces
+
+## API Endpoints
+
+The Gateway routes all requests. Key endpoints include:
+
+**Auth Service:**
+- `POST /auth-service/api/auth/register` — User registration
+- `POST /auth-service/api/auth/login` — User login
+- `POST /auth-service/api/auth/refresh` — Token refresh
+
+**Order Service:**
+- `GET /order-service/products` — List all products
+- `GET /order-service/products/{id}` — Get product details
+- `POST /order-service/api/checkout` — Create order from cart
+- `POST /order-service/api/reduce-stock` — Reduce inventory after payment
+- `GET /order-service/api/orders` — Get user orders
+
+**Payment Service:**
+- `POST /payment/api/process` — Process payment
+
+## Development Workflow
+
+1. **Start Backend Services**
+   ```powershell
+   powershell -ExecutionPolicy Bypass -File .\start-backend.ps1
+   ```
+   Or use Docker Compose for complete stack
+
+2. **Start Frontend**
+   ```powershell
+   cd .\Front
+   powershell -ExecutionPolicy Bypass -File .\serve.ps1 -Port 5500
+   ```
+
+3. **Access Application**
+   - Frontend: http://localhost:5500/
+   - Gateway: http://localhost:8222/
+   - Eureka: http://localhost:8761/
+
 ## Contact
 
-If you need more detailed README content (architecture diagram, env variables, CI steps, or Docker instructions), tell me which services you want documented and I will expand this file.
+For additional documentation, architecture diagrams, or specific service details, please refer to individual service README files or open an issue.
