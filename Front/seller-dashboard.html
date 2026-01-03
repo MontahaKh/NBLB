@@ -116,7 +116,12 @@
 
           <!-- Products List Tab -->
           <div class="section-content d-none" id="products-section">
-            <h4 class="mb-3"><i class="fa fa-box me-2"></i>My Products</h4>
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <h4 class="mb-0"><i class="fa fa-box me-2"></i>My Products</h4>
+              <button class="btn btn-primary" onclick="document.querySelector('[data-section=add-product]').click()">
+                <i class="fa fa-plus me-2"></i>Add Product
+              </button>
+            </div>
             <div class="table-responsive">
               <table class="table table-dashboard table-hover">
                 <thead>
@@ -154,15 +159,14 @@
                   <label for="category" class="form-label">Category <span class="text-danger">*</span></label>
                   <select id="category" class="form-select" required>
                     <option value="">Select a category</option>
-                    <option value="FRESH_PRODUCE">Fruits & Légumes frais</option>
-                    <option value="DAIRY_PRODUCTS">Produits laitiers</option>
-                    <option value="MEAT_AND_SEAFOOD">Viande & Poisson</option>
-                    <option value="BAKED_GOODS">Boulangerie & Pâtisserie</option>
-                    <option value="PREPARED_FOODS">Plats préparés</option>
-                    <option value="BEVERAGES">Boissons</option>
-                    <option value="FROZEN_FOODS">Surgelés</option>
-                    <option value="HOUSEHOLD">Entretien maison</option>
-                    <option value="PERSONAL_CARE">Hygiène & Beauté</option>
+                    <option value="Fresh Produce">Fresh Produce</option>
+                    <option value="Meat and Seafood">Meat and Seafood</option>
+                    <option value="Baked Goods">Baked Goods</option>
+                    <option value="Dairy Products">Dairy Products</option>
+                    <option value="Beverages">Beverages</option>
+                    <option value="Frozen Foods">Frozen Foods</option>
+                    <option value="Snacks">Snacks</option>
+                    <option value="Other">Other</option>
                   </select>
                 </div>
 
@@ -285,11 +289,70 @@
           const targetSection = document.getElementById(sectionId + '-section');
           if (targetSection) {
             targetSection.classList.remove('d-none');
+            // Load data when section is shown
+            if (sectionId === 'dashboard') loadSellerStats();
+            else if (sectionId === 'products') loadSellerProducts();
+            else if (sectionId === 'orders') loadSellerOrders();
           }
         });
       });
     });
   </script>
+
+  <!-- Edit Product Modal -->
+  <div class="modal fade" id="editProductModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Edit Product</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <form id="editProductForm">
+            <input type="hidden" id="editProductId">
+            <div class="mb-3">
+              <label for="editProductName" class="form-label">Product Name</label>
+              <input type="text" class="form-control" id="editProductName" required>
+            </div>
+            <div class="mb-3">
+              <label for="editProductCategory" class="form-label">Category</label>
+              <select class="form-control" id="editProductCategory" required>
+                <option value="Fresh Produce">Fresh Produce</option>
+                <option value="Meat and Seafood">Meat and Seafood</option>
+                <option value="Baked Goods">Baked Goods</option>
+                <option value="Dairy Products">Dairy Products</option>
+                <option value="Beverages">Beverages</option>
+                <option value="Frozen Foods">Frozen Foods</option>
+                <option value="Snacks">Snacks</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="editProductPrice" class="form-label">Price</label>
+              <input type="number" class="form-control" id="editProductPrice" step="0.01" required>
+            </div>
+            <div class="mb-3">
+              <label for="editProductQuantity" class="form-label">Quantity</label>
+              <input type="number" class="form-control" id="editProductQuantity" required>
+            </div>
+            <div class="mb-3">
+              <label for="editProductStatus" class="form-label">Status</label>
+              <select class="form-control" id="editProductStatus" required>
+                <option value="AVAILABLE">Available</option>
+                <option value="OUT_OF_STOCK">Out of Stock</option>
+                <option value="DISCONTINUED">Discontinued</option>
+              </select>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-primary" onclick="submitEditProduct()">Update Product</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </body>
 
 </html>

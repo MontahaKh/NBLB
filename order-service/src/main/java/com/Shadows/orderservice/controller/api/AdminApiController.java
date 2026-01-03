@@ -203,6 +203,197 @@ public class AdminApiController {
     }
 
     /**
+     * Create a new product (admin only)
+     */
+    @PostMapping("/products")
+    public ResponseEntity<?> createProduct(
+            @RequestHeader(value = "Authorization", required = false) String authorization,
+            @RequestBody Map<String, Object> productRequest) {
+
+        if (!isAdmin(authorization)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Admin access required");
+        }
+
+        try {
+            String name = (String) productRequest.get("name");
+            String price = productRequest.get("price").toString();
+            String category = (String) productRequest.get("category");
+            Integer quantity = Integer.parseInt(productRequest.get("quantity").toString());
+            String addedBy = (String) productRequest.get("addedBy");
+
+            // Validation
+            if (name == null || name.trim().isEmpty()) {
+                return ResponseEntity.badRequest().body("Product name is required");
+            }
+            if (price == null || price.trim().isEmpty()) {
+                return ResponseEntity.badRequest().body("Product price is required");
+            }
+            if (category == null || category.trim().isEmpty()) {
+                return ResponseEntity.badRequest().body("Product category is required");
+            }
+            if (quantity == null || quantity < 0) {
+                return ResponseEntity.badRequest().body("Product quantity must be valid");
+            }
+            if (addedBy == null || addedBy.trim().isEmpty()) {
+                return ResponseEntity.badRequest().body("Seller is required");
+            }
+
+            // Create new product
+            Product product = new Product();
+            product.setName(name);
+            product.setPrice(Double.parseDouble(price));
+
+            String categoryStr = category.toUpperCase().replace(" ", "_");
+            product.setCategory(com.Shadows.orderservice.model.Category.valueOf(categoryStr));
+
+            product.setQuantity(quantity);
+            product.setAddedBy(addedBy);
+            product.setStatus(com.Shadows.orderservice.model.ProductStatus.AVAILABLE);
+
+            Product savedProduct = productRepository.save(product);
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("id", savedProduct.getId());
+            response.put("name", savedProduct.getName());
+            response.put("price", savedProduct.getPrice());
+            response.put("category", savedProduct.getCategory());
+            response.put("quantity", savedProduct.getQuantity());
+            response.put("seller", savedProduct.getAddedBy());
+
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error creating product: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Update a product (admin only)
+     */
+    @PutMapping("/products/{id}")
+    public ResponseEntity<?> updateProduct(
+            @PathVariable Long id,
+            @RequestHeader(value = "Authorization", required = false) String authorization,
+            @RequestBody Map<String, Object> productRequest) {
+
+        if (!isAdmin(authorization)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Admin access required");
+        }
+
+        try {
+            Optional<Product> productOptional = productRepository.findById(id);
+            if (!productOptional.isPresent()) {
+                return ResponseEntity.notFound().build();
+            }
+
+            Product product = productOptional.get();
+
+            // Update fields if provided
+            if (productRequest.containsKey("name") && productRequest.get("name") != null) {
+                product.setName((String) productRequest.get("name"));
+            }
+            if (productRequest.containsKey("price") && productRequest.get("price") != null) {
+                product.setPrice(Double.parseDouble(productRequest.get("price").toString()));
+            }
+            if (productRequest.containsKey("category") && productRequest.get("category") != null) {
+                String categoryStr = ((String) productRequest.get("category")).toUpperCase().replace(" ", "_");
+                product.setCategory(com.Shadows.orderservice.model.Category.valueOf(categoryStr));
+            }
+            if (productRequest.containsKey("quantity") && productRequest.get("quantity") != null) {
+                product.setQuantity(Integer.parseInt(productRequest.get("quantity").toString()));
+            }
+            if (productRequest.containsKey("status") && productRequest.get("status") != null) {
+                String statusStr = ((String) productRequest.get("status")).toUpperCase();
+                product.setStatus(com.Shadows.orderservice.model.ProductStatus.valueOf(statusStr));
+            }
+
+            Product updatedProduct = productRepository.save(product);
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("id", updatedProduct.getId());
+            response.put("name", updatedProduct.getName());
+            response.put("price", updatedProduct.getPrice());
+            response.put("category", updatedProduct.getCategory());
+            response.put("quantity", updatedProduct.getQuantity());
+            response.put("seller", updatedProduct.getAddedBy());
+
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error updating product: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Delete a product (admin only)
+     */
+    @DeleteMapping("/products/{id}")
+    public ResponseEntity<?> deleteProduct(
+            @PathVariable Long id,
+            @RequestHeader(value = "Authorization", required = false) String authorization) {
+
+        if (!isAdmin(authorization)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Admin access required");
+        }
+
+        try {
+            Optional<Product> productOptional = productRepository.findById(id);
+            if (!productOptional.isPresent()) {
+                return ResponseEntity.notFound().build();
+            }
+
+            productRepository.deleteById(id);
+            return ResponseEntity.ok(Collections.singletonMap("message", "Product deleted successfully"));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error deleting product: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Update order status (admin only)
+     */
+    @PutMapping("/orders/{id}/status")
+    public ResponseEntity<?> updateOrderStatus(
+            @PathVariable Long id,
+            @RequestHeader(value = "Authorization", required = false) String authorization,
+            @RequestBody Map<String, String> statusRequest) {
+
+        if (!isAdmin(authorization)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Admin access required");
+        }
+
+        try {
+            Optional<Order> orderOptional = orderRepository.findById(id);
+            if (!orderOptional.isPresent()) {
+                return ResponseEntity.notFound().build();
+            }
+
+            String newStatus = statusRequest.get("status");
+            if (newStatus == null || newStatus.trim().isEmpty()) {
+                return ResponseEntity.badRequest().body("Status is required");
+            }
+
+            Order order = orderOptional.get();
+            order.setStatus(newStatus);
+
+            Order updatedOrder = orderRepository.save(order);
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("id", updatedOrder.getId());
+            response.put("customer", updatedOrder.getUsername());
+            response.put("date", updatedOrder.getOrderDate());
+            response.put("total", String.format("$%.2f", updatedOrder.getTotal()));
+            response.put("status", updatedOrder.getStatus());
+
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error updating order: " + e.getMessage());
+        }
+    }
+
+    /**
      * Check if user is admin
      */
     private boolean isAdmin(String authorization) {

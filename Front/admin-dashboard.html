@@ -120,7 +120,12 @@
 
           <!-- Users Management Tab -->
           <div class="section-content d-none" id="users-section">
-            <h4 class="mb-3"><i class="fa fa-users me-2"></i>Users Management</h4>
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <h4 class="mb-0"><i class="fa fa-users me-2"></i>Users Management</h4>
+              <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createUserModal">
+                <i class="fa fa-plus me-2"></i>Create User
+              </button>
+            </div>
             <div class="table-responsive">
               <table class="table table-dashboard table-hover">
                 <thead>
@@ -129,13 +134,12 @@
                     <th>Username</th>
                     <th>Email</th>
                     <th>Role</th>
-                    <th>Status</th>
                     <th>Actions</th>
                   </tr>
                 </thead>
                 <tbody id="usersTable">
                   <tr>
-                    <td colspan="6" class="text-center text-muted">Loading users...</td>
+                    <td colspan="5" class="text-center text-muted">Loading users...</td>
                   </tr>
                 </tbody>
               </table>
@@ -152,13 +156,12 @@
                     <th>Username</th>
                     <th>Email</th>
                     <th>Products</th>
-                    <th>Status</th>
                     <th>Actions</th>
                   </tr>
                 </thead>
                 <tbody id="sellersTable">
                   <tr>
-                    <td colspan="5" class="text-center text-muted">Loading sellers...</td>
+                    <td colspan="4" class="text-center text-muted">Loading sellers...</td>
                   </tr>
                 </tbody>
               </table>
@@ -167,7 +170,12 @@
 
           <!-- Products Management Tab -->
           <div class="section-content d-none" id="products-section">
-            <h4 class="mb-3"><i class="fa fa-box me-2"></i>Products Management</h4>
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <h4 class="mb-0"><i class="fa fa-box me-2"></i>Products Management</h4>
+              <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createProductModal">
+                <i class="fa fa-plus me-2"></i>Add Product
+              </button>
+            </div>
             <div class="table-responsive">
               <table class="table table-dashboard table-hover">
                 <thead>
@@ -236,6 +244,222 @@
     </div>
   </main>
 
+  <!-- Create User Modal -->
+  <div class="modal fade" id="createUserModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Create New User</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <form id="createUserForm">
+            <div class="mb-3">
+              <label for="newUsername" class="form-label">Username</label>
+              <input type="text" class="form-control" id="newUsername" required>
+            </div>
+            <div class="mb-3">
+              <label for="newEmail" class="form-label">Email</label>
+              <input type="email" class="form-control" id="newEmail" required>
+            </div>
+            <div class="mb-3">
+              <label for="newPassword" class="form-label">Password</label>
+              <input type="password" class="form-control" id="newPassword" required>
+            </div>
+            <div class="mb-3">
+              <label for="newRole" class="form-label">Role</label>
+              <select class="form-control" id="newRole" required>
+                <option value="">Select Role</option>
+                <option value="ADMIN">Admin</option>
+                <option value="SHOP">Seller</option>
+                <option value="CLIENT">Customer</option>
+              </select>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-primary" onclick="submitCreateUser()">Create User</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit User Modal -->
+  <div class="modal fade" id="editUserModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Edit User</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <form id="editUserForm">
+            <input type="hidden" id="editUserId">
+            <div class="mb-3">
+              <label for="editUsername" class="form-label">Username</label>
+              <input type="text" class="form-control" id="editUsername" disabled>
+            </div>
+            <div class="mb-3">
+              <label for="editUserEmail" class="form-label">Email</label>
+              <input type="email" class="form-control" id="editUserEmail" required>
+            </div>
+            <div class="mb-3">
+              <label for="editUserPassword" class="form-label">Password (leave empty to keep current)</label>
+              <input type="password" class="form-control" id="editUserPassword">
+            </div>
+            <div class="mb-3">
+              <label for="editUserRole" class="form-label">Role</label>
+              <select class="form-control" id="editUserRole" required>
+                <option value="ADMIN">Admin</option>
+                <option value="SHOP">Seller</option>
+                <option value="CLIENT">Customer</option>
+              </select>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-primary" onclick="submitEditUser()">Update User</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Create Product Modal -->
+  <div class="modal fade" id="createProductModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Create New Product</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <form id="createProductForm">
+            <div class="mb-3">
+              <label for="newProductName" class="form-label">Product Name</label>
+              <input type="text" class="form-control" id="newProductName" required>
+            </div>
+            <div class="mb-3">
+              <label for="newProductPrice" class="form-label">Price</label>
+              <input type="number" class="form-control" id="newProductPrice" step="0.01" required>
+            </div>
+            <div class="mb-3">
+              <label for="newProductCategory" class="form-label">Category</label>
+              <select class="form-control" id="newProductCategory" required>
+                <option value="">Select Category</option>
+                <option value="Fresh Produce">Fresh Produce</option>
+                <option value="Meat and Seafood">Meat and Seafood</option>
+                <option value="Baked Goods">Baked Goods</option>
+                <option value="Dairy Products">Dairy Products</option>
+                <option value="Beverages">Beverages</option>
+                <option value="Frozen Foods">Frozen Foods</option>
+                <option value="Snacks">Snacks</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="newProductQuantity" class="form-label">Quantity</label>
+              <input type="number" class="form-control" id="newProductQuantity" required>
+            </div>
+            <div class="mb-3">
+              <label for="newProductSeller" class="form-label">Seller</label>
+              <input type="text" class="form-control" id="newProductSeller" required>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-primary" onclick="submitCreateProduct()">Create Product</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Product Modal -->
+  <div class="modal fade" id="editProductModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Edit Product</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <form id="editProductForm">
+            <input type="hidden" id="editProductId">
+            <div class="mb-3">
+              <label for="editProductName" class="form-label">Product Name</label>
+              <input type="text" class="form-control" id="editProductName" required>
+            </div>
+            <div class="mb-3">
+              <label for="editProductPrice" class="form-label">Price</label>
+              <input type="number" class="form-control" id="editProductPrice" step="0.01" required>
+            </div>
+            <div class="mb-3">
+              <label for="editProductCategory" class="form-label">Category</label>
+              <select class="form-control" id="editProductCategory" required>
+                <option value="Fresh Produce">Fresh Produce</option>
+                <option value="Meat and Seafood">Meat and Seafood</option>
+                <option value="Baked Goods">Baked Goods</option>
+                <option value="Dairy Products">Dairy Products</option>
+                <option value="Beverages">Beverages</option>
+                <option value="Frozen Foods">Frozen Foods</option>
+                <option value="Snacks">Snacks</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="editProductQuantity" class="form-label">Quantity</label>
+              <input type="number" class="form-control" id="editProductQuantity" required>
+            </div>
+            <div class="mb-3">
+              <label for="editProductStatus" class="form-label">Status</label>
+              <select class="form-control" id="editProductStatus" required>
+                <option value="AVAILABLE">Available</option>
+                <option value="OUT_OF_STOCK">Out of Stock</option>
+                <option value="DISCONTINUED">Discontinued</option>
+              </select>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-primary" onclick="submitEditProduct()">Update Product</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Update Order Status Modal -->
+  <div class="modal fade" id="updateOrderStatusModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Update Order Status</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <form id="updateOrderStatusForm">
+            <input type="hidden" id="updateOrderId">
+            <div class="mb-3">
+              <label for="updateOrderStatus" class="form-label">Status</label>
+              <select class="form-control" id="updateOrderStatus" required>
+                <option value="PENDING">Pending</option>
+                <option value="PROCESSING">Processing</option>
+                <option value="SHIPPED">Shipped</option>
+                <option value="DELIVERED">Delivered</option>
+                <option value="CANCELLED">Cancelled</option>
+              </select>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-primary" onclick="submitUpdateOrderStatus()">Update Status</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
 </body>
 

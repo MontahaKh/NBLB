@@ -1,6 +1,6 @@
 /**
  * Admin Dashboard JavaScript
- * Handles data loading and display for admin panel
+ * Handles CRUD operations for admin panel
  */
 
 // Use gateway URL from auth-utils.js (already loaded)
@@ -10,10 +10,7 @@ const AUTH_API_BASE = `${API_BASE}/auth/api`;
 // Initialize dashboard on page load
 document.addEventListener('DOMContentLoaded', function () {
     console.log('Admin dashboard loaded');
-
-    // Require admin access
     requireAdmin();
-
     loadDashboardStats();
     setupEventListeners();
 });
@@ -23,7 +20,6 @@ document.addEventListener('DOMContentLoaded', function () {
  */
 function loadDashboardStats() {
     const token = getTokenFromSession();
-
     if (!token) {
         console.error('No token found');
         return;
@@ -60,22 +56,13 @@ function loadDashboardStats() {
  */
 function setupEventListeners() {
     console.log('Setting up event listeners');
-
     const navItems = document.querySelectorAll('.nav-sidebar a, .nav-sidebar span');
-    console.log('Found nav items:', navItems.length);
-
-    navItems.forEach((link, index) => {
+    navItems.forEach((link) => {
         const sectionId = link.getAttribute('data-section');
-        console.log(`Nav item ${index}: section=${sectionId}`);
-
         link.addEventListener('click', function (e) {
             e.preventDefault();
-            console.log('Clicked section:', sectionId);
-
             // Update active state
-            navItems.forEach(item => {
-                item.classList.remove('active');
-            });
+            navItems.forEach(item => item.classList.remove('active'));
             this.classList.add('active');
 
             // Show/hide sections
@@ -84,46 +71,23 @@ function setupEventListeners() {
             });
 
             const targetSection = document.getElementById(sectionId + '-section');
-            console.log('Target section:', sectionId + '-section', targetSection);
-
             if (targetSection) {
                 targetSection.classList.remove('d-none');
-
-                // Load data based on section
-                if (sectionId === 'users') {
-                    loadUsers();
-                } else if (sectionId === 'sellers') {
-                    loadSellers();
-                } else if (sectionId === 'products') {
-                    loadProducts();
-                } else if (sectionId === 'orders') {
-                    loadOrders();
-                }
+                if (sectionId === 'users') loadUsers();
+                else if (sectionId === 'sellers') loadSellers();
+                else if (sectionId === 'products') loadProducts();
+                else if (sectionId === 'orders') loadOrders();
             }
         });
     });
 }
 
 /**
- * Load and display users
+ * Load all users
  */
 function loadUsers() {
     const token = getTokenFromSession();
-    const tbody = document.getElementById('usersTable');
-
-    tbody.innerHTML = '<tr><td colspan="6" class="text-center text-muted">Loading users...</td></tr>';
-
-    if (!token) {
-        console.error('No token available');
-        tbody.innerHTML = '<tr><td colspan="6" class="text-center text-danger">Error: No authentication token. Please login first.</td></tr>';
-        return;
-    }
-
-    const url = `${AUTH_API_BASE}/users`;
-    console.log('Loading users from:', url);
-    console.log('Token:', token.substring(0, 20) + '...');
-
-    fetch(url, {
+    fetch(`${AUTH_API_BASE}/users`, {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${token}`,
@@ -131,55 +95,41 @@ function loadUsers() {
         }
     })
         .then(response => {
-            console.log('Users response status:', response.status);
-            console.log('Response headers:', {
-                'content-type': response.headers.get('content-type'),
-                'authorization': response.headers.get('authorization')
-            });
-            if (!response.ok) {
-                return response.text().then(text => {
-                    throw new Error(`HTTP ${response.status}: ${text}`);
-                });
-            }
+            if (!response.ok) throw new Error('Failed to load users');
             return response.json();
         })
-        .then(users => {
-            console.log('Users loaded:', users);
-            if (users.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="6" class="text-center text-muted">No users found</td></tr>';
+        .then(data => {
+            const tbody = document.getElementById('usersTable');
+            if (!data || data.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="text-center text-muted">No users found</td></tr>';
                 return;
             }
 
-            tbody.innerHTML = users.map(user => `
-            <tr>
-                <td>${user.id}</td>
-                <td>${user.username}</td>
-                <td>${user.email}</td>
-                <td><span class="badge bg-primary">${user.role}</span></td>
-                <td><span class="badge bg-success">Active</span></td>
-                <td>
-                    <button class="btn btn-sm btn-primary" onclick="editUser('${user.username}')">
-                        <i class="fa fa-edit"></i>
-                    </button>
-                </td>
-            </tr>
-        `).join('');
+            tbody.innerHTML = data.map(user => `
+                <tr>
+                    <td>${user.id}</td>
+                    <td>${user.username}</td>
+                    <td>${user.email}</td>
+                    <td><span class="badge bg-info">${user.role}</span></td>
+                    <td>
+                        <button class="btn btn-sm btn-primary" onclick="openEditUserModal(${user.id}, '${user.username}', '${user.email}', '${user.role}')">
+                            <i class="fa fa-edit"></i> Edit
+                        </button>
+                        <button class="btn btn-sm btn-danger" onclick="deleteUser(${user.id}, '${user.username}')">
+                            <i class="fa fa-trash"></i> Delete
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
         })
-        .catch(error => {
-            console.error('Error loading users:', error);
-            tbody.innerHTML = `<tr><td colspan="6" class="text-center text-danger">Error: ${error.message}</td></tr>`;
-        });
+        .catch(error => console.error('Error loading users:', error));
 }
 
 /**
- * Load and display sellers
+ * Load all sellers
  */
 function loadSellers() {
     const token = getTokenFromSession();
-    const tbody = document.getElementById('sellersTable');
-
-    tbody.innerHTML = '<tr><td colspan="5" class="text-center text-muted">Loading sellers...</td></tr>';
-
     fetch(`${ADMIN_API_BASE}/sellers`, {
         method: 'GET',
         headers: {
@@ -191,44 +141,34 @@ function loadSellers() {
             if (!response.ok) throw new Error('Failed to load sellers');
             return response.json();
         })
-        .then(sellers => {
+        .then(data => {
             const tbody = document.getElementById('sellersTable');
-            if (sellers.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="5" class="text-center text-muted">No sellers found</td></tr>';
+            if (!data || data.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" class="text-center text-muted">No sellers found</td></tr>';
                 return;
             }
 
-            tbody.innerHTML = sellers.map(seller => `
-            <tr>
-                <td>${seller.username}</td>
-                <td>${seller.email}</td>
-                <td><span class="badge bg-info">${seller.productCount}</span></td>
-                <td><span class="badge bg-success">Active</span></td>
-                <td>
-                    <button class="btn btn-sm btn-primary" onclick="editSeller('${seller.username}')">
-                        <i class="fa fa-edit"></i>
-                    </button>
-                </td>
-            </tr>
-        `).join('');
+            tbody.innerHTML = data.map(seller => `
+                <tr>
+                    <td>${seller.username}</td>
+                    <td>${seller.email}</td>
+                    <td><span class="badge bg-success">${seller.productCount || 0} products</span></td>
+                    <td>
+                        <button class="btn btn-sm btn-info" onclick="viewSeller('${seller.username}')">
+                            <i class="fa fa-eye"></i> View
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
         })
-        .catch(error => {
-            console.error('Error loading sellers:', error);
-            document.getElementById('sellersTable').innerHTML = `
-            <tr><td colspan="5" class="text-center text-danger">Error loading sellers</td></tr>
-        `;
-        });
+        .catch(error => console.error('Error loading sellers:', error));
 }
 
 /**
- * Load and display products
+ * Load all products
  */
 function loadProducts() {
     const token = getTokenFromSession();
-    const tbody = document.getElementById('productsTable');
-
-    tbody.innerHTML = '<tr><td colspan="7" class="text-center text-muted">Loading products...</td></tr>';
-
     fetch(`${ADMIN_API_BASE}/products`, {
         method: 'GET',
         headers: {
@@ -240,50 +180,40 @@ function loadProducts() {
             if (!response.ok) throw new Error('Failed to load products');
             return response.json();
         })
-        .then(products => {
-            if (products.length === 0) {
+        .then(data => {
+            const tbody = document.getElementById('productsTable');
+            if (!data || data.length === 0) {
                 tbody.innerHTML = '<tr><td colspan="7" class="text-center text-muted">No products found</td></tr>';
                 return;
             }
 
-            tbody.innerHTML = products.map(product => `
-            <tr>
-                <td>${product.id}</td>
-                <td>${product.name}</td>
-                <td>${product.seller}</td>
-                <td>${product.category}</td>
-                <td>$${parseFloat(product.price).toFixed(2)}</td>
-                <td>
-                    <span class="badge ${product.stock > 0 ? 'bg-success' : 'bg-danger'}">
-                        ${product.stock}
-                    </span>
-                </td>
-                <td>
-                    <button class="btn btn-sm btn-info" onclick="viewProduct(${product.id})">
-                        <i class="fa fa-eye"></i>
-                    </button>
-                    <button class="btn btn-sm btn-danger" onclick="deleteProduct(${product.id})">
-                        <i class="fa fa-trash"></i>
-                    </button>
-                </td>
-            </tr>
-        `).join('');
+            tbody.innerHTML = data.map(product => `
+                <tr>
+                    <td>${product.id}</td>
+                    <td>${product.name}</td>
+                    <td>${product.seller}</td>
+                    <td>${product.category}</td>
+                    <td>$${parseFloat(product.price).toFixed(2)}</td>
+                    <td><span class="badge bg-warning">${product.stock}</span></td>
+                    <td>
+                        <button class="btn btn-sm btn-primary" onclick="openEditProductModal(${product.id}, '${product.name}', '${product.price}', '${product.category}', ${product.stock}, '${product.status}')">
+                            <i class="fa fa-edit"></i> Edit
+                        </button>
+                        <button class="btn btn-sm btn-danger" onclick="deleteProduct(${product.id})">
+                            <i class="fa fa-trash"></i> Delete
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
         })
-        .catch(error => {
-            console.error('Error loading products:', error);
-            tbody.innerHTML = '<tr><td colspan="7" class="text-center text-danger">Error loading products</td></tr>';
-        });
+        .catch(error => console.error('Error loading products:', error));
 }
 
 /**
- * Load and display orders
+ * Load all orders
  */
 function loadOrders() {
     const token = getTokenFromSession();
-    const tbody = document.getElementById('ordersTable');
-
-    tbody.innerHTML = '<tr><td colspan="6" class="text-center text-muted">Loading orders...</td></tr>';
-
     fetch(`${ADMIN_API_BASE}/orders`, {
         method: 'GET',
         headers: {
@@ -295,67 +225,282 @@ function loadOrders() {
             if (!response.ok) throw new Error('Failed to load orders');
             return response.json();
         })
-        .then(orders => {
-            if (orders.length === 0) {
+        .then(data => {
+            const tbody = document.getElementById('ordersTable');
+            if (!data || data.length === 0) {
                 tbody.innerHTML = '<tr><td colspan="6" class="text-center text-muted">No orders found</td></tr>';
                 return;
             }
 
-            tbody.innerHTML = orders.map(order => `
-            <tr>
-                <td>${order.id}</td>
-                <td>${order.customer}</td>
-                <td>${new Date(order.date).toLocaleDateString()}</td>
-                <td>${order.total}</td>
-                <td>
-                    <span class="badge ${getStatusColor(order.status)}">
-                        ${order.status}
-                    </span>
-                </td>
-                <td>
-                    <button class="btn btn-sm btn-primary" onclick="viewOrder(${order.id})">
-                        <i class="fa fa-eye"></i>
-                    </button>
-                </td>
-            </tr>
-        `).join('');
+            tbody.innerHTML = data.map(order => `
+                <tr>
+                    <td>${order.id}</td>
+                    <td>${order.customer}</td>
+                    <td>${order.date}</td>
+                    <td>${order.total}</td>
+                    <td><span class="badge bg-secondary">${order.status}</span></td>
+                    <td>
+                        <button class="btn btn-sm btn-primary" onclick="openUpdateOrderStatusModal(${order.id}, '${order.status}')">
+                            <i class="fa fa-edit"></i> Update Status
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
         })
-        .catch(error => {
-            console.error('Error loading orders:', error);
-            tbody.innerHTML = '<tr><td colspan="6" class="text-center text-danger">Error loading orders</td></tr>';
-        });
+        .catch(error => console.error('Error loading orders:', error));
 }
 
 /**
- * Get status badge color
+ * USER CRUD FUNCTIONS
  */
-function getStatusColor(status) {
-    const colors = {
-        'PENDING': 'bg-warning',
-        'CONFIRMED': 'bg-info',
-        'SHIPPED': 'bg-primary',
-        'DELIVERED': 'bg-success',
-        'CANCELLED': 'bg-danger'
+
+function openEditUserModal(userId, username, email, role) {
+    document.getElementById('editUserId').value = userId;
+    document.getElementById('editUsername').value = username;
+    document.getElementById('editUserEmail').value = email;
+    document.getElementById('editUserRole').value = role;
+    const modal = new bootstrap.Modal(document.getElementById('editUserModal'));
+    modal.show();
+}
+
+function submitCreateUser() {
+    const token = getTokenFromSession();
+    const userData = {
+        username: document.getElementById('newUsername').value,
+        email: document.getElementById('newEmail').value,
+        password: document.getElementById('newPassword').value,
+        role: document.getElementById('newRole').value
     };
-    return colors[status] || 'bg-secondary';
+
+    fetch(`${AUTH_API_BASE}/users`, {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(userData)
+    })
+        .then(response => {
+            if (!response.ok) throw new Error('Failed to create user');
+            return response.json();
+        })
+        .then(data => {
+            alert('User created successfully');
+            bootstrap.Modal.getInstance(document.getElementById('createUserModal')).hide();
+            document.getElementById('createUserForm').reset();
+            loadUsers();
+        })
+        .catch(error => alert('Error: ' + error.message));
+}
+
+function submitEditUser() {
+    const token = getTokenFromSession();
+    const userId = document.getElementById('editUserId').value;
+    const userData = {
+        email: document.getElementById('editUserEmail').value,
+        password: document.getElementById('editUserPassword').value || undefined,
+        role: document.getElementById('editUserRole').value
+    };
+
+    // Remove empty password
+    if (!userData.password) delete userData.password;
+
+    fetch(`${AUTH_API_BASE}/users/${userId}`, {
+        method: 'PUT',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(userData)
+    })
+        .then(response => {
+            if (!response.ok) throw new Error('Failed to update user');
+            return response.json();
+        })
+        .then(data => {
+            alert('User updated successfully');
+            bootstrap.Modal.getInstance(document.getElementById('editUserModal')).hide();
+            loadUsers();
+        })
+        .catch(error => alert('Error: ' + error.message));
+}
+
+function deleteUser(userId, username) {
+    if (username.toLowerCase() === 'admin') {
+        alert('Cannot delete admin user');
+        return;
+    }
+
+    if (!confirm(`Delete user "${username}"?`)) return;
+
+    const token = getTokenFromSession();
+    fetch(`${AUTH_API_BASE}/users/${userId}`, {
+        method: 'DELETE',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        }
+    })
+        .then(response => {
+            if (!response.ok) throw new Error('Failed to delete user');
+            alert('User deleted successfully');
+            loadUsers();
+        })
+        .catch(error => alert('Error: ' + error.message));
 }
 
 /**
- * Get JWT token from session/localStorage
+ * PRODUCT CRUD FUNCTIONS
  */
+
+function openEditProductModal(productId, name, price, category, quantity, status) {
+    document.getElementById('editProductId').value = productId;
+    document.getElementById('editProductName').value = name;
+    document.getElementById('editProductPrice').value = price;
+    document.getElementById('editProductCategory').value = category;
+    document.getElementById('editProductQuantity').value = quantity;
+    document.getElementById('editProductStatus').value = status;
+    const modal = new bootstrap.Modal(document.getElementById('editProductModal'));
+    modal.show();
+}
+
+function submitCreateProduct() {
+    const token = getTokenFromSession();
+    const productData = {
+        name: document.getElementById('newProductName').value,
+        price: document.getElementById('newProductPrice').value,
+        category: document.getElementById('newProductCategory').value,
+        quantity: document.getElementById('newProductQuantity').value,
+        addedBy: document.getElementById('newProductSeller').value
+    };
+
+    fetch(`${ADMIN_API_BASE}/products`, {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(productData)
+    })
+        .then(response => {
+            if (!response.ok) throw new Error('Failed to create product');
+            return response.json();
+        })
+        .then(data => {
+            alert('Product created successfully');
+            bootstrap.Modal.getInstance(document.getElementById('createProductModal')).hide();
+            document.getElementById('createProductForm').reset();
+            loadProducts();
+        })
+        .catch(error => alert('Error: ' + error.message));
+}
+
+function submitEditProduct() {
+    const token = getTokenFromSession();
+    const productId = document.getElementById('editProductId').value;
+    const productData = {
+        name: document.getElementById('editProductName').value,
+        price: document.getElementById('editProductPrice').value,
+        category: document.getElementById('editProductCategory').value,
+        quantity: document.getElementById('editProductQuantity').value,
+        status: document.getElementById('editProductStatus').value
+    };
+
+    fetch(`${ADMIN_API_BASE}/products/${productId}`, {
+        method: 'PUT',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(productData)
+    })
+        .then(response => {
+            if (!response.ok) throw new Error('Failed to update product');
+            return response.json();
+        })
+        .then(data => {
+            alert('Product updated successfully');
+            bootstrap.Modal.getInstance(document.getElementById('editProductModal')).hide();
+            loadProducts();
+        })
+        .catch(error => alert('Error: ' + error.message));
+}
+
+function deleteProduct(productId) {
+    if (!confirm('Delete this product?')) return;
+
+    const token = getTokenFromSession();
+    fetch(`${ADMIN_API_BASE}/products/${productId}`, {
+        method: 'DELETE',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        }
+    })
+        .then(response => {
+            if (!response.ok) throw new Error('Failed to delete product');
+            alert('Product deleted successfully');
+            loadProducts();
+        })
+        .catch(error => alert('Error: ' + error.message));
+}
+
+/**
+ * ORDER FUNCTIONS
+ */
+
+function openUpdateOrderStatusModal(orderId, currentStatus) {
+    document.getElementById('updateOrderId').value = orderId;
+    document.getElementById('updateOrderStatus').value = currentStatus;
+    const modal = new bootstrap.Modal(document.getElementById('updateOrderStatusModal'));
+    modal.show();
+}
+
+function submitUpdateOrderStatus() {
+    const token = getTokenFromSession();
+    const orderId = document.getElementById('updateOrderId').value;
+    const statusData = {
+        status: document.getElementById('updateOrderStatus').value
+    };
+
+    fetch(`${ADMIN_API_BASE}/orders/${orderId}/status`, {
+        method: 'PUT',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(statusData)
+    })
+        .then(response => {
+            if (!response.ok) throw new Error('Failed to update order status');
+            return response.json();
+        })
+        .then(data => {
+            alert('Order status updated successfully');
+            bootstrap.Modal.getInstance(document.getElementById('updateOrderStatusModal')).hide();
+            loadOrders();
+        })
+        .catch(error => alert('Error: ' + error.message));
+}
+
+/**
+ * HELPER FUNCTIONS
+ */
+
+function viewSeller(username) {
+    alert(`View seller: ${username}`);
+}
+
 function getTokenFromSession() {
-    // Use getToken() from auth-utils.js if available
     if (typeof getToken === 'function') {
         const token = getToken();
         console.log('Token from auth-utils:', token ? 'Present' : 'Missing');
         return token;
     }
 
-    // Fallback: Try to get from localStorage
     let token = localStorage.getItem('token') || localStorage.getItem('jwt_token');
     console.log('Token from localStorage:', token ? 'Present' : 'Missing');
 
-    // If not found, try to extract from URL
     if (!token) {
         const params = new URLSearchParams(window.location.search);
         token = params.get('token');
@@ -366,29 +511,4 @@ function getTokenFromSession() {
     }
 
     return token;
-}
-
-/**
- * Action handlers
- */
-function editUser(username) {
-    alert(`Edit user: ${username}`);
-}
-
-function editSeller(username) {
-    alert(`Edit seller: ${username}`);
-}
-
-function viewProduct(productId) {
-    alert(`View product: ${productId}`);
-}
-
-function deleteProduct(productId) {
-    if (confirm('Are you sure you want to delete this product?')) {
-        alert(`Delete product: ${productId}`);
-    }
-}
-
-function viewOrder(orderId) {
-    alert(`View order: ${orderId}`);
 }
