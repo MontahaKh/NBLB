@@ -18,6 +18,7 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
   <script src="js/auth-utils.js"></script>
   <script src="js/navbar.js"></script>
+  <script src="js/admin-dashboard.js"></script>
 
   <main class="page-wrapper">
     <div class="container-fluid">
@@ -141,6 +142,29 @@
             </div>
           </div>
 
+          <!-- Sellers Management Tab -->
+          <div class="section-content d-none" id="sellers-section">
+            <h4 class="mb-3"><i class="fa fa-store me-2"></i>Sellers Management</h4>
+            <div class="table-responsive">
+              <table class="table table-dashboard table-hover">
+                <thead>
+                  <tr>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Products</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="sellersTable">
+                  <tr>
+                    <td colspan="5" class="text-center text-muted">Loading sellers...</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
           <!-- Products Management Tab -->
           <div class="section-content d-none" id="products-section">
             <h4 class="mb-3"><i class="fa fa-box me-2"></i>Products Management</h4>
@@ -212,34 +236,7 @@
     </div>
   </main>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      requireAdmin();
 
-      // Handle sidebar navigation
-      document.querySelectorAll('.nav-sidebar a, .nav-sidebar span').forEach(link => {
-        link.addEventListener('click', function (e) {
-          e.preventDefault();
-          const sectionId = this.getAttribute('data-section');
-
-          // Update active state
-          document.querySelectorAll('.nav-sidebar a, .nav-sidebar span').forEach(item => {
-            item.classList.remove('active');
-          });
-          this.classList.add('active');
-
-          // Show/hide sections
-          document.querySelectorAll('.section-content').forEach(section => {
-            section.classList.add('d-none');
-          });
-          const targetSection = document.getElementById(sectionId + '-section');
-          if (targetSection) {
-            targetSection.classList.remove('d-none');
-          }
-        });
-      });
-    });
-  </script>
 </body>
 
 </html>

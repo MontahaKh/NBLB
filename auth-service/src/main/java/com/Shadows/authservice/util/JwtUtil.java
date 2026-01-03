@@ -49,6 +49,38 @@ public class JwtUtil {
         }
     }
 
+    /**
+     * Validate token without username (for API endpoints that don't have username
+     * upfront)
+     */
+    public boolean validateToken(String token) {
+        try {
+            Jwts.parserBuilder()
+                    .setSigningKey(getSigningKey())
+                    .build()
+                    .parseClaimsJws(token);
+            return !isTokenExpired(token);
+        } catch (JwtException | IllegalArgumentException e) {
+            return false;
+        }
+    }
+
+    /**
+     * Extract role from token
+     */
+    public String extractRole(String token) {
+        try {
+            return Jwts.parserBuilder()
+                    .setSigningKey(getSigningKey())
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody()
+                    .get("role", String.class);
+        } catch (JwtException | IllegalArgumentException e) {
+            return null;
+        }
+    }
+
     private boolean isTokenExpired(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(getSigningKey())
