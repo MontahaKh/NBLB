@@ -36,7 +36,8 @@ function Wait-Port {
       if (Test-NetConnection $HostName -Port $Port -InformationLevel Quiet) {
         return $true
       }
-    } catch {
+    }
+    catch {
       # ignore transient errors
     }
     Start-Sleep -Milliseconds 500
@@ -82,11 +83,29 @@ try {
       Write-Host "Set JAVA_HOME to a JDK 17+ (example: C:\\jdk-17) or pass -JavaExe." -ForegroundColor Yellow
     }
   }
-} catch {
+}
+catch {
   # Ignore version check errors
 }
 
 $root = Split-Path -Parent $MyInvocation.MyCommand.Path
+
+# Load .env variables
+$envFile = Join-Path $root ".env"
+if (Test-Path $envFile) {
+  Write-Host "Loading environment variables from .env..." -ForegroundColor Data
+  Get-Content $envFile | ForEach-Object {
+    $line = $_.Trim()
+    if ($line -notmatch '^#' -and $line -match '=') {
+      $name, $value = $line.Split('=', 2)
+      $name = $name.Trim()
+      $value = $value.Trim()
+      [Environment]::SetEnvironmentVariable($name, $value, "Process")
+      # Also set usually for PowerShell session for good measure
+      Set-Item -Path "env:$name" -Value $value
+    }
+  }
+}
 
 # Ordre important: discovery (Eureka) -> gateway -> services
 Start-Jar -Name 'discovery'     -WorkingDirectory (Join-Path $root 'discovery')     -JarRelativePath 'target\discovery-0.0.1-SNAPSHOT.jar' -Port 8761
@@ -94,6 +113,7 @@ Start-Jar -Name 'gateway'       -WorkingDirectory (Join-Path $root 'gateway')   
 Start-Jar -Name 'auth-service'  -WorkingDirectory (Join-Path $root 'auth-service')  -JarRelativePath 'target\auth-service-0.0.1-SNAPSHOT.jar' -Port 8090
 Start-Jar -Name 'order-service' -WorkingDirectory (Join-Path $root 'order-service') -JarRelativePath 'target\order-service-0.0.1-SNAPSHOT.jar' -Port 8091
 Start-Jar -Name 'payment'       -WorkingDirectory (Join-Path $root 'payment')       -JarRelativePath 'target\payment-0.0.1-SNAPSHOT.jar'   -Port 8092
+Start-Jar -Name 'recommendation-service' -WorkingDirectory (Join-Path $root 'recommendation-service') -JarRelativePath 'target\recommendation-service-0.0.1-SNAPSHOT.jar' -Port 8093
 
 Write-Host ''
 Write-Host 'URLs:' -ForegroundColor Yellow

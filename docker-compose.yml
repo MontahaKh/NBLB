@@ -76,6 +76,23 @@ services:
         condition: service_started
     restart: unless-stopped
 
+  recommendation-service:
+    build:
+      context: ./recommendation-service
+      dockerfile: Dockerfile
+    container_name: nblb-recommendation
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      EUREKA_DEFAULT_ZONE: http://discovery:8761/eureka/
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+    ports:
+      - "8093:8093"
+    depends_on:
+      discovery:
+        condition: service_started
+      order-service:
+        condition: service_started
+        
   payment:
     build:
       context: ./payment
@@ -101,6 +118,24 @@ services:
         condition: service_started
     restart: unless-stopped
 
+  recommendation-service:
+    build:
+      context: ./recommendation-service
+      dockerfile: Dockerfile
+    container_name: nblb-recommendation
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      EUREKA_DEFAULT_ZONE: http://discovery:8761/eureka/
+      GEMINI_API_KEY: ${GEMINI_API_KEY}
+    ports:
+      - "8093:8093"
+    depends_on:
+      discovery:
+        condition: service_started
+      order-service:
+        condition: service_started
+    restart: unless-stopped
+
   gateway:
     build:
       context: ./gateway
@@ -119,6 +154,8 @@ services:
       order-service:
         condition: service_started
       payment:
+        condition: service_started
+      recommendation-service:
         condition: service_started
     restart: unless-stopped
 

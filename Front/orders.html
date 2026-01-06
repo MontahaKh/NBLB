@@ -43,6 +43,32 @@
         </div>
     </main>
 
+    <!-- Order Details Modal -->
+    <div class="modal fade" id="orderModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Order Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p><strong>Order ID:</strong> <span id="modalOrderId"></span></p>
+                    <p><strong>Status:</strong> <span id="modalOrderStatus"></span></p>
+                    <p><strong>Total:</strong> <span id="modalOrderTotal"></span></p>
+                    <hr>
+                    <h6>Products:</h6>
+                    <ul id="modalProductList" class="list-group">
+                        <!-- Items injected via JS -->
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success d-none" id="modalPayBtn">Pay Now</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Auth + Orders scripts -->
     <script src="js/orders.js"></script>
 </body>

@@ -31,6 +31,45 @@ NBLB is a comprehensive marketplace application featuring role-based access cont
 - JDK 17 or newer installed and JAVA_HOME configured
 - Maven (or use bundled wrappers `mvnw` / `mvnw.cmd`)
 
+## Environment Configuration
+
+The project requires environment variables for sensitive configuration. Follow these steps:
+
+1. **Copy the example file to create your local `.env`:**
+   ```powershell
+   copy .env.example .env
+   ```
+
+2. **Edit `.env` with your actual values:**
+   ```dotenv
+   GEMINI_API_KEY=your-google-gemini-api-key
+   MYSQL_ROOT_PASSWORD=your-db-password
+   JWT_SECRET=your-jwt-secret-key
+   ```
+
+3. **Obtain Required Keys:**
+   - **GEMINI_API_KEY**: Get it from [Google AI Studio](https://ai.google.dev)
+   - **MYSQL_ROOT_PASSWORD**: Create a secure password for MySQL
+   - **JWT_SECRET**: Generate a secure random string (min 32 characters)
+
+4. **Load environment variables before running services:**
+   ```powershell
+   # Windows PowerShell
+   Get-Content .env | ForEach-Object {
+       if ($_ -match '^\s*([^=]+)\s*=\s*(.*)$') {
+           [Environment]::SetEnvironmentVariable($matches[1], $matches[2], 'Process')
+       }
+   }
+   ```
+
+   Or manually set in your terminal:
+   ```powershell
+   $env:GEMINI_API_KEY='your-key'
+   $env:JWT_SECRET='your-secret'
+   ```
+
+**Note:** The `.env` file is listed in `.gitignore` and should never be committed to version control.
+
 ## Run (examples)
 
 You can run each service individually. Replace `<module>` with the module folder name.

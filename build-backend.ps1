@@ -33,7 +33,8 @@ if ($resolvedJavaHome) {
   $env:JAVA_HOME = $resolvedJavaHome
   $env:PATH = "$resolvedJavaHome\bin;" + $env:PATH
   Write-Host "JAVA_HOME=$resolvedJavaHome" -ForegroundColor DarkGray
-} else {
+}
+else {
   Write-Host "Warning: JAVA_HOME not set. Make sure you are using Java 17+ (Spring Boot 3.5.x)." -ForegroundColor Yellow
 }
 
@@ -42,7 +43,8 @@ $modules = @(
   'gateway',
   'auth-service',
   'order-service',
-  'payment'
+  'payment',
+  'recommendation-service'
 )
 
 $extraArgs = @()
@@ -59,7 +61,8 @@ foreach ($m in $modules) {
   Push-Location $moduleDir
   try {
     & $wrapper -q -B clean package @extraArgs
-  } finally {
+  }
+  finally {
     Pop-Location
   }
 }

@@ -49,37 +49,71 @@ function updateNavbarForRole() {
     const adminLink = document.getElementById('navAdminLink');
     const sellerLink = document.getElementById('navSellerLink');
     const ordersLink = document.getElementById('navOrdersLink');
+    const recommendedLink = document.getElementById('navRecommendedLink');
     const loginLink = document.getElementById('navLoginLink');
 
     // Admin link - show only if logged in AND role is ADMIN
     if (adminLink) {
         const shouldShow = isLoggedIn && role === 'ADMIN';
         adminLink.classList.toggle('d-none', !shouldShow);
-        console.log('Admin link should show:', shouldShow);
     }
 
     // Seller link - show only if logged in AND role is SHOP or SELLER
     if (sellerLink) {
         const shouldShow = isLoggedIn && (role === 'SHOP' || role === 'SELLER');
         sellerLink.classList.toggle('d-none', !shouldShow);
-        console.log('Seller link should show:', shouldShow);
     }
 
     // Orders link - show only if logged in AND role is CLIENT
     if (ordersLink) {
         const shouldShow = isLoggedIn && role === 'CLIENT';
         ordersLink.classList.toggle('d-none', !shouldShow);
-        console.log('Orders link should show:', shouldShow);
+    }
+
+    // Recommendations link - show if logged in (any role with purchase history potentially)
+    if (recommendedLink) {
+        recommendedLink.classList.toggle('d-none', !isLoggedIn);
+        if (isLoggedIn) {
+            checkRecommendations();
+        }
     }
 
     // Login link - show only if NOT logged in
     if (loginLink) {
         loginLink.classList.toggle('d-none', isLoggedIn);
-        console.log('Login link should show:', !isLoggedIn);
     }
 
     // Update user menu
     updateUserMenu();
+}
+
+/**
+ * Check for recommendations to show notification dot
+ */
+async function checkRecommendations() {
+    const badge = document.getElementById('recommendationBadge');
+    if (!badge) return;
+
+    try {
+        const token = getToken();
+        if (!token) return;
+
+        const response = await fetch(`${API_BASE}/api/recommendations`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            // If we have recommendations, show the red dot
+            if (Array.isArray(data) && data.length > 0) {
+                badge.classList.remove('d-none');
+            } else {
+                badge.classList.add('d-none');
+            }
+        }
+    } catch (error) {
+        console.warn('Failed to check recommendations indicator:', error);
+    }
 }
 
 /**

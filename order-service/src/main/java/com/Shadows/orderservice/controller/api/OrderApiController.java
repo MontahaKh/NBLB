@@ -51,6 +51,16 @@ public class OrderApiController {
             s.status = o.getStatus();
             s.total = safeParseDouble(o.getPrice());
             s.orderDate = o.getDate() != null ? Instant.ofEpochMilli(o.getDate().getTime()).toString() : null;
+            if (o.getProducts() != null) {
+                // Convert full list with duplicates into "Product (x3)" format
+                Map<String, Long> counts = o.getProducts().stream()
+                        .map(Product::getName)
+                        .collect(Collectors.groupingBy(name -> name, Collectors.counting()));
+
+                s.productNames = counts.entrySet().stream()
+                        .map(e -> e.getKey() + " (x" + e.getValue() + ")")
+                        .collect(Collectors.toList());
+            }
             summaries.add(s);
         }
 
@@ -151,7 +161,21 @@ public class OrderApiController {
         order.setRef((int) (Math.random() * 100000));
         order.setQuantity(totalQuantity);
         order.setPrice(total.toPlainString());
-        order.setProducts(new ArrayList<>(products));
+
+        // Populate products list with frequency replication (Hack for ManyToMany
+        // quantity)
+        // If user bought 3 Apples, we add the Apple reference 3 times to the list
+        List<Product> orderProducts = new ArrayList<>();
+        for (Map.Entry<Long, Integer> e : requestedQty.entrySet()) {
+            Product p = byId.get(e.getKey());
+            if (p != null) {
+                int count = e.getValue();
+                for (int i = 0; i < count; i++) {
+                    orderProducts.add(p);
+                }
+            }
+        }
+        order.setProducts(orderProducts);
 
         Order saved = orderService.createOrder(order);
 
@@ -487,6 +511,7 @@ public class OrderApiController {
         public String orderDate;
         public double total;
         public String status;
+        public List<String> productNames;
     }
 
     public static class SaleLine {
