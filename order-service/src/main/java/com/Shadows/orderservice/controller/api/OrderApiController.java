@@ -200,6 +200,7 @@ public class OrderApiController {
         String seller = jwtUtil.extractUsername(token);
         List<Order> orders = orderService.getOrdersByProductOwner(seller);
 
+        // Return individual product sales lines for order dashboard display
         List<SaleLine> lines = new ArrayList<>();
         for (Order o : orders) {
             String status = Optional.ofNullable(o.getStatus()).orElse("");
@@ -230,6 +231,63 @@ public class OrderApiController {
         }
 
         return ResponseEntity.ok(lines);
+    }
+
+    @GetMapping("/seller/sales/grouped")
+    public ResponseEntity<?> getSellerSalesGrouped(
+            @RequestHeader(value = "Authorization", required = false) String authorization) {
+        String token = extractBearerToken(authorization);
+        if (token == null || !jwtUtil.validateToken(token)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", "Missing/invalid token"));
+        }
+
+        String role = Optional.ofNullable(jwtUtil.extractRole(token)).orElse("");
+        if (!"SHOP".equalsIgnoreCase(role) && !"SELLER".equalsIgnoreCase(role)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Map.of("error", "Forbidden"));
+        }
+
+        String seller = jwtUtil.extractUsername(token);
+        List<Order> orders = orderService.getOrdersByProductOwner(seller);
+
+        // Return grouped orders with product names aggregated
+        // This is used by recommendation service for top-sold analysis
+        List<OrderSummary> summaries = new ArrayList<>();
+        for (Order o : orders) {
+            String status = Optional.ofNullable(o.getStatus()).orElse("");
+
+            // Filter for completed orders only
+            if (!("PAID".equalsIgnoreCase(status)
+                    || "WAITING_DELIVERY".equalsIgnoreCase(status)
+                    || "SHIPPED".equalsIgnoreCase(status))) {
+                continue;
+            }
+
+            if (o.getProducts() == null || o.getProducts().isEmpty())
+                continue;
+
+            // Collect seller's products in this order
+            List<String> sellerProductNames = new ArrayList<>();
+            for (Product p : o.getProducts()) {
+                if (p == null)
+                    continue;
+                if (seller.equalsIgnoreCase(Optional.ofNullable(p.getAddedBy()).orElse(""))) {
+                    sellerProductNames.add(p.getName());
+                }
+            }
+
+            // Only add to summaries if seller has products in this order
+            if (!sellerProductNames.isEmpty()) {
+                OrderSummary summary = new OrderSummary();
+                summary.id = o.getId();
+                summary.status = o.getStatus();
+                summary.total = safeParseDouble(o.getPrice());
+                summary.orderDate = o.getDate() != null ? Instant.ofEpochMilli(o.getDate().getTime()).toString() : null;
+                summary.productNames = sellerProductNames;
+                summaries.add(summary);
+            }
+        }
+
+        return ResponseEntity.ok(summaries);
     }
 
     private static String extractBearerToken(String authorization) {

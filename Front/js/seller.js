@@ -92,6 +92,9 @@ function loadSellerStats() {
             document.getElementById('totalSellerOrders').textContent = '0';
             document.getElementById('totalSales').textContent = '$0.00';
         });
+
+    // Load recommendations integrated into dashboard
+    loadDashboardRecommendations(token);
 }
 
 /**
@@ -436,6 +439,122 @@ function getCurrentUsername() {
     }
 
     return null;
+}
+
+/**
+ * Load recommendations for dashboard integration
+ * Loads both top-sold items and AI suggestions
+ */
+function loadDashboardRecommendations(token) {
+    const API_RECOMMENDATIONS = `${API_BASE}/api/seller/recommendations`;
+
+    // Load top-sold items first
+    fetch(`${API_RECOMMENDATIONS}/top-sold?limit=5`, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        }
+    })
+        .then(response => {
+            if (!response.ok) throw new Error('Failed to load top-sold items');
+            return response.json();
+        })
+        .then(items => {
+            renderDashboardTopSoldItems(items);
+
+            // After loading top-sold items, load AI suggestions based on them
+            loadAISuggestions(token, items, API_RECOMMENDATIONS);
+        })
+        .catch(error => {
+            console.error('Error loading top-sold items:', error);
+            document.getElementById('dashboardTopSoldList').innerHTML =
+                '<p class="text-muted text-center py-3 small">No sales data available yet</p>';
+            // Still try to load suggestions even if top-sold items failed
+            loadAISuggestions(token, [], API_RECOMMENDATIONS);
+        });
+}
+
+/**
+ * Load AI suggestions based on top-sold items
+ */
+function loadAISuggestions(token, topSoldItems, API_RECOMMENDATIONS) {
+    // Send top-sold items to the suggestions endpoint
+    fetch(`${API_RECOMMENDATIONS}/suggest-products`, {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            topSoldItems: topSoldItems || [],
+            limit: 5
+        })
+    })
+        .then(response => {
+            if (!response.ok) throw new Error('Failed to load suggestions');
+            return response.json();
+        })
+        .then(data => {
+            // The API returns: { suggestions: [...], basedOn: [...], count: N }
+            const suggestions = data.suggestions || data || [];
+            renderDashboardSuggestionsItems(suggestions);
+        })
+        .catch(error => {
+            console.error('Error loading AI suggestions:', error);
+            document.getElementById('dashboardSuggestedProductsList').innerHTML =
+                '<p class="text-muted text-center py-3 small">Unable to generate suggestions</p>';
+        });
+}
+
+/**
+ * Render top-sold items for dashboard
+ */
+function renderDashboardTopSoldItems(items) {
+    const container = document.getElementById('dashboardTopSoldList');
+
+    if (!items || items.length === 0) {
+        container.innerHTML = '<p class="text-muted text-center py-3 small">No sales data available yet</p>';
+        return;
+    }
+
+    container.innerHTML = items.map((item, idx) => `
+        <div class="list-group-item d-flex justify-content-between align-items-center">
+            <div class="flex-grow-1">
+                <div class="fw-bold small">#${idx + 1} ${item.name}</div>
+                <small class="text-muted">${item.category}</small>
+            </div>
+            <div class="text-end">
+                <div class="fw-bold">$${item.price}</div>
+            </div>
+        </div>
+    `).join('');
+}
+
+/**
+ * Render AI suggested products for dashboard
+ * Suggestions are product name strings from the API
+ */
+function renderDashboardSuggestionsItems(suggestions) {
+    const container = document.getElementById('dashboardSuggestedProductsList');
+
+    if (!suggestions || !Array.isArray(suggestions) || suggestions.length === 0) {
+        container.innerHTML = '<p class="text-muted text-center py-3 small">No suggestions available</p>';
+        return;
+    }
+
+    // Suggestions are product names (strings), not objects
+    container.innerHTML = suggestions.map(productName => `
+        <div class="list-group-item d-flex justify-content-between align-items-center">
+            <div class="flex-grow-1">
+                <div class="fw-bold small">${productName}</div>
+                <small class="text-muted">AI Recommended</small>
+            </div>
+            <div class="text-end">
+                <small class="badge bg-success">Consider Adding</small>
+            </div>
+        </div>
+    `).join('');
 }
 
 /**

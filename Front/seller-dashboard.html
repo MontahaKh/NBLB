@@ -37,9 +37,6 @@
             <a href="#" class="list-group-item list-group-item-action" data-section="orders">
               <i class="fa fa-shopping-cart me-2"></i> Orders
             </a>
-            <a href="#" class="list-group-item list-group-item-action" data-section="analytics">
-              <i class="fa fa-chart-bar me-2"></i> Analytics
-            </a>
             <a href="#" class="list-group-item list-group-item-action" data-section="settings">
               <i class="fa fa-cog me-2"></i> Settings
             </a>
@@ -111,6 +108,39 @@
               <i class="fa fa-info-circle me-2"></i>
               <strong>Welcome to your Seller Dashboard!</strong> Manage your products, monitor orders, and track your
               sales performance.
+            </div>
+
+            <!-- Top Selling Items & Recommendations in Dashboard -->
+            <h5 class="mt-5 mb-3"><i class="fa fa-chart-line me-2"></i>Sales & Recommendations</h5>
+            <div class="row g-4">
+              <!-- Top Sold Items -->
+              <div class="col-lg-6">
+                <div class="card shadow-sm">
+                  <div class="card-header bg-primary text-white">
+                    <h6 class="mb-0"><i class="fa fa-trophy me-2"></i>Your Top Selling Items</h6>
+                  </div>
+                  <div class="card-body">
+                    <div id="dashboardTopSoldList" class="list-group">
+                      <p class="text-muted text-center py-3 small">Loading top-sold items...</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- AI Suggestions -->
+              <div class="col-lg-6">
+                <div class="card shadow-sm">
+                  <div class="card-header bg-success text-white">
+                    <h6 class="mb-0"><i class="fa fa-sparkles me-2"></i>Suggested Products to Add</h6>
+                  </div>
+                  <div class="card-body">
+                    <p class="text-muted small mb-3">Based on your sales patterns, here are products to consider:</p>
+                    <div id="dashboardSuggestedProductsList" class="list-group">
+                      <p class="text-muted text-center py-3 small">Loading suggestions...</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -241,12 +271,12 @@
             </div>
           </div>
 
-          <!-- Analytics Tab -->
+          <!-- Analytics Tab (Optional Stats) -->
           <div class="section-content d-none" id="analytics-section">
-            <h4 class="mb-3"><i class="fa fa-chart-bar me-2"></i>Analytics & Reports</h4>
+            <h4 class="mb-3"><i class="fa fa-chart-bar me-2"></i>Detailed Analytics</h4>
             <div class="alert alert-info">
               <i class="fa fa-chart-line me-2"></i>
-              Your sales analytics and reports will appear here.
+              Detailed sales analytics and reports coming soon.
             </div>
           </div>
 
@@ -264,6 +294,7 @@
   </main>
 
   <script src="js/seller.js"></script>
+  <script src="js/seller-recommendations.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function () {
       requireSeller();

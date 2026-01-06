@@ -26,6 +26,9 @@ public class GeminiService {
 
     // Simple in-memory cache: Key = PurchaseHistoryString, Value = Recommendations
     private final Map<String, List<ProductDto>> recommendationCache = new java.util.concurrent.ConcurrentHashMap<>();
+    
+    // Seller product suggestions cache: Key = Top-sold items signature
+    private final Map<String, List<String>> sellerSuggestionsCache = new java.util.concurrent.ConcurrentHashMap<>();
 
     private final OrderServiceClient client;
     private final ChatClient chatClient;
@@ -281,5 +284,187 @@ public class GeminiService {
             log.error("Failed to parse Gemini/Recommend response: " + jsonResponse, e);
             return Collections.emptyList();
         }
+    }
+
+    // ========== SELLER RECOMMENDATIONS METHODS ==========
+
+    /**
+     * Get top sold items for seller dashboard
+     * Analyzes actual order data to determine most popular products
+     * Requires seller context via authorization header
+     */
+    public List<ProductDto> getTopSoldItems(int limit, String authHeader) {
+        List<OrderSummaryDto> orders;
+        List<ProductDto> catalog;
+        
+        try {
+            // Get grouped orders where the seller is the product owner
+            // This returns one entry per order with product names aggregated
+            orders = client.getSellerSalesGrouped(authHeader);
+            catalog = client.getProducts();
+        } catch (Exception e) {
+            log.error("Failed to fetch seller sales or products", e);
+            return Collections.emptyList();
+        }
+
+        if (orders == null || orders.isEmpty() || catalog.isEmpty()) {
+            log.warn("No seller sales or catalog data available");
+            return Collections.emptyList();
+        }
+
+        // Count sales by product name
+        // Each order can have multiple products, so we flatmap to count each product occurrence
+        Map<String, Long> salesCount = orders.stream()
+                .filter(o -> o.getProductNames() != null)
+                .flatMap(o -> o.getProductNames().stream())
+                .collect(Collectors.groupingBy(
+                    name -> name,  // Group by product name directly
+                    Collectors.counting()  // Count occurrences
+                ));
+
+        log.info("Seller sales count by product: {}", salesCount);
+
+        // Filter catalog to only seller's products and sort by sales count (descending)
+        // Only include products that the seller has actually sold
+        return catalog.stream()
+                .filter(product -> salesCount.containsKey(product.getName()))  // Only seller's sold products
+                .map(product -> {
+                    // Get sales count for this product
+                    long sales = salesCount.getOrDefault(product.getName(), 0L);
+                    return new SimpleEntry<>(product, sales);
+                })
+                .sorted((a, b) -> Long.compare(b.getValue(), a.getValue())) // Sort by sales descending
+                .map(SimpleEntry::getKey)
+                .limit(limit)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * AI-powered suggestion for seller to add new products
+     * Based on top-sold items, suggests complementary products
+     */
+    public List<String> suggestNewProducts(List<ProductDto> topSoldItems, List<ProductDto> currentCatalog) {
+        if (topSoldItems.isEmpty() || currentCatalog.isEmpty()) {
+            log.warn("Cannot suggest products: empty input data");
+            return fallbackProductSuggestions(topSoldItems);
+        }
+
+        // Create cache key from top-sold items
+        String cacheKey = topSoldItems.stream()
+                .sorted(Comparator.comparing(p -> p.getId()))
+                .map(p -> p.getName())
+                .collect(Collectors.joining("|"));
+
+        if (sellerSuggestionsCache.containsKey(cacheKey)) {
+            log.info("Returning cached product suggestions for key: {}", cacheKey);
+            return sellerSuggestionsCache.get(cacheKey);
+        }
+
+        // Build prompt for AI
+        String prompt = buildSellerSuggestionsPrompt(topSoldItems, currentCatalog);
+
+        // Call Gemini
+        String aiResponse = callGemini(prompt);
+        log.info("Gemini Seller Suggestions Response: {}", aiResponse);
+
+        // Parse response
+        List<String> suggestions = parseSellerSuggestions(aiResponse);
+
+        if (suggestions.isEmpty()) {
+            log.warn("Gemini returned no suggestions. Using fallback.");
+            suggestions = fallbackProductSuggestions(topSoldItems);
+        }
+
+        // Cache successful suggestions
+        sellerSuggestionsCache.put(cacheKey, suggestions);
+        return suggestions;
+    }
+
+    /**
+     * Build prompt for seller product suggestions
+     */
+    private String buildSellerSuggestionsPrompt(List<ProductDto> topSoldItems, List<ProductDto> catalog) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Role: You are a retail business expert and product strategist.\n");
+        sb.append("Your seller's top-selling items (by sales volume):\n");
+        topSoldItems.forEach(item -> 
+            sb.append("- ").append(item.getName()).append(" (Category: ").append(item.getCategory()).append(")\n")
+        );
+
+        sb.append("\nCurrent inventory:\n");
+        catalog.forEach(p -> 
+            sb.append("- ").append(p.getName()).append(" (Category: ").append(p.getCategory()).append(")\n")
+        );
+
+        sb.append("\nTask: Suggest 3-5 NEW product names (NOT in current inventory) that would complement the seller's top-selling items.\n");
+        sb.append("Consider:\n");
+        sb.append("1. Products that pair well with current best sellers (e.g., if selling beef, suggest marinades, seasonings)\n");
+        sb.append("2. Products within the same category that aren't yet stocked\n");
+        sb.append("3. Complementary items from adjacent categories\n");
+        sb.append("Format: Return ONLY a JSON array of product name suggestions. Example: [\"Product A\", \"Product B\", \"Product C\"]. Do not include markdown formatting or explanations.");
+        return sb.toString();
+    }
+
+    /**
+     * Parse seller suggestions from AI response
+     */
+    private List<String> parseSellerSuggestions(String jsonResponse) {
+        try {
+            Pattern arrayPattern = Pattern.compile("\\[(.*?)\\]", Pattern.DOTALL);
+            Matcher matcher = arrayPattern.matcher(jsonResponse);
+
+            if (!matcher.find()) {
+                log.warn("No JSON array found in response: {}", jsonResponse);
+                return Collections.emptyList();
+            }
+
+            String arrayContent = matcher.group(1);
+            String[] items = arrayContent.split(",");
+
+            return Arrays.stream(items)
+                    .map(String::trim)
+                    .map(s -> s.replaceAll("^\"|\"$", "")) // Remove quotes
+                    .filter(s -> !s.isEmpty())
+                    .collect(Collectors.toList());
+
+        } catch (Exception e) {
+            log.error("Failed to parse seller suggestions: " + jsonResponse, e);
+            return Collections.emptyList();
+        }
+    }
+
+    /**
+     * Fallback: Suggest products based on categories of top-sold items
+     */
+    private List<String> fallbackProductSuggestions(List<ProductDto> topSoldItems) {
+        if (topSoldItems.isEmpty()) {
+            return Arrays.asList(
+                "Organic Salt",
+                "Premium Olive Oil",
+                "Fresh Herbs Bundle"
+            );
+        }
+
+        // Extract categories and suggest related items
+        Set<String> categories = topSoldItems.stream()
+                .map(ProductDto::getCategory)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toSet());
+
+        List<String> fallbackSuggestions = new ArrayList<>();
+
+        for (String category : categories) {
+            if (category.contains("PRODUCE")) {
+                fallbackSuggestions.addAll(Arrays.asList("Organic Vegetable Seeds", "Composting Kit"));
+            } else if (category.contains("MEAT")) {
+                fallbackSuggestions.addAll(Arrays.asList("Specialty Marinades", "Grilling Seasonings", "Premium Sea Salt"));
+            } else if (category.contains("DAIRY")) {
+                fallbackSuggestions.addAll(Arrays.asList("Artisanal Butter", "Specialty Cheese Selections"));
+            }
+        }
+
+        return fallbackSuggestions.isEmpty() 
+            ? Arrays.asList("Organic Spice Mix", "Gourmet Condiments", "Specialty Oils")
+            : fallbackSuggestions.stream().distinct().limit(5).collect(Collectors.toList());
     }
 }
