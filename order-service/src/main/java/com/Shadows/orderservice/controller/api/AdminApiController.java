@@ -249,6 +249,28 @@ public class AdminApiController {
             product.setQuantity(quantity);
             product.setAddedBy(addedBy);
             product.setStatus(com.Shadows.orderservice.model.ProductStatus.AVAILABLE);
+            product.setCreatedAt(new java.sql.Date(System.currentTimeMillis()));
+
+            // Set optional fields
+            Object description = productRequest.get("description");
+            if (description != null && !description.toString().trim().isEmpty()) {
+                product.setDescription(description.toString());
+            }
+
+            Object imageUrl = productRequest.get("imageUrl");
+            if (imageUrl != null && !imageUrl.toString().trim().isEmpty()) {
+                product.setImageUrl(imageUrl.toString());
+            }
+
+            Object expiryDate = productRequest.get("expiryDate");
+            if (expiryDate != null && !expiryDate.toString().trim().isEmpty()) {
+                try {
+                    java.time.LocalDate parsed = java.time.LocalDate.parse(expiryDate.toString());
+                    product.setExpieryDate(java.sql.Date.valueOf(parsed));
+                } catch (Exception dateEx) {
+                    // If date parsing fails, leave it null
+                }
+            }
 
             Product savedProduct = productRepository.save(product);
 
@@ -258,6 +280,10 @@ public class AdminApiController {
             response.put("price", savedProduct.getPrice());
             response.put("category", savedProduct.getCategory());
             response.put("quantity", savedProduct.getQuantity());
+            response.put("description", savedProduct.getDescription());
+            response.put("imageUrl", savedProduct.getImageUrl());
+            response.put("expiryDate", savedProduct.getExpieryDate());
+            response.put("createdAt", savedProduct.getCreatedAt());
             response.put("seller", savedProduct.getAddedBy());
 
             return ResponseEntity.status(HttpStatus.CREATED).body(response);

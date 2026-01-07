@@ -7,21 +7,21 @@ param(
 $Root = [System.IO.Path]::GetFullPath($Root)
 
 $mime = @{
-  ".html" = "text/html; charset=utf-8"
-  ".htm"  = "text/html; charset=utf-8"
-  ".css"  = "text/css; charset=utf-8"
-  ".js"   = "application/javascript; charset=utf-8"
-  ".json" = "application/json; charset=utf-8"
-  ".png"  = "image/png"
-  ".jpg"  = "image/jpeg"
-  ".jpeg" = "image/jpeg"
-  ".gif"  = "image/gif"
-  ".svg"  = "image/svg+xml"
-  ".ico"  = "image/x-icon"
-  ".woff" = "font/woff"
-  ".woff2"= "font/woff2"
-  ".ttf"  = "font/ttf"
-  ".map"  = "application/json; charset=utf-8"
+  ".html"  = "text/html; charset=utf-8"
+  ".htm"   = "text/html; charset=utf-8"
+  ".css"   = "text/css; charset=utf-8"
+  ".js"    = "application/javascript; charset=utf-8"
+  ".json"  = "application/json; charset=utf-8"
+  ".png"   = "image/png"
+  ".jpg"   = "image/jpeg"
+  ".jpeg"  = "image/jpeg"
+  ".gif"   = "image/gif"
+  ".svg"   = "image/svg+xml"
+  ".ico"   = "image/x-icon"
+  ".woff"  = "font/woff"
+  ".woff2" = "font/woff2"
+  ".ttf"   = "font/ttf"
+  ".map"   = "application/json; charset=utf-8"
 }
 
 $defaultPrefixes = @(
@@ -40,7 +40,8 @@ foreach ($p in $Prefixes) {
   try {
     $listener.Prefixes.Add($p)
     $activePrefixes.Add($p)
-  } catch {
+  }
+  catch {
     Write-Host "Warning: impossible d'ajouter le prefix '$p' ($($_.Exception.Message))" -ForegroundColor Yellow
   }
 }
@@ -53,7 +54,8 @@ if ($activePrefixes.Count -eq 0) {
 try {
   try {
     $listener.Start()
-  } catch {
+  }
+  catch {
     Write-Host "Erreur: impossible de démarrer le serveur sur $($Prefixes -join ', ')." -ForegroundColor Red
     Write-Host "Détails: $($_.Exception.Message)" -ForegroundColor Red
     Write-Host "Astuce: essaye un autre port (ex: -Port 5501) ou lance PowerShell en admin (URLACL)." -ForegroundColor Yellow
@@ -67,7 +69,8 @@ try {
   while ($listener.IsListening) {
     try {
       $context = $listener.GetContext()
-    } catch {
+    }
+    catch {
       if ($listener.IsListening) {
         Write-Host "Warning: listener error ($($_.Exception.Message))" -ForegroundColor Yellow
         Start-Sleep -Milliseconds 200

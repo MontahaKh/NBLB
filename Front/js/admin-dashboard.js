@@ -371,6 +371,9 @@ function submitCreateProduct() {
         price: document.getElementById('newProductPrice').value,
         category: document.getElementById('newProductCategory').value,
         quantity: document.getElementById('newProductQuantity').value,
+        description: document.getElementById('newProductDescription').value,
+        imageUrl: document.getElementById('newProductImageUrl').value,
+        expiryDate: document.getElementById('newProductExpiryDate').value,
         addedBy: document.getElementById('newProductSeller').value
     };
 

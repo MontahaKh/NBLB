@@ -294,33 +294,33 @@ public class GeminiService {
      * Requires seller context via authorization header
      */
     public List<ProductDto> getTopSoldItems(int limit, String authHeader) {
-        List<OrderSummaryDto> orders;
+        List<Map<String, Object>> sales;  // Raw sales data (SaleLine format)
         List<ProductDto> catalog;
         
         try {
-            // Get grouped orders where the seller is the product owner
-            // This returns one entry per order with product names aggregated
-            orders = client.getSellerSalesGrouped(authHeader);
+            // Get seller sales - returns one entry per product per order
+            sales = client.getSellerSales(authHeader);
             catalog = client.getProducts();
         } catch (Exception e) {
             log.error("Failed to fetch seller sales or products", e);
             return Collections.emptyList();
         }
 
-        if (orders == null || orders.isEmpty() || catalog.isEmpty()) {
+        if (sales == null || sales.isEmpty() || catalog.isEmpty()) {
             log.warn("No seller sales or catalog data available");
             return Collections.emptyList();
         }
 
         // Count sales by product name
-        // Each order can have multiple products, so we flatmap to count each product occurrence
-        Map<String, Long> salesCount = orders.stream()
-                .filter(o -> o.getProductNames() != null)
-                .flatMap(o -> o.getProductNames().stream())
-                .collect(Collectors.groupingBy(
-                    name -> name,  // Group by product name directly
-                    Collectors.counting()  // Count occurrences
-                ));
+        // The sales list contains one entry per product per order
+        Map<String, Long> salesCount = new HashMap<>();
+        for (Map<String, Object> sale : sales) {
+            // Extract productName from the SaleLine object
+            String productName = (String) sale.get("productName");
+            if (productName != null) {
+                salesCount.put(productName, salesCount.getOrDefault(productName, 0L) + 1);
+            }
+        }
 
         log.info("Seller sales count by product: {}", salesCount);
 
@@ -330,8 +330,8 @@ public class GeminiService {
                 .filter(product -> salesCount.containsKey(product.getName()))  // Only seller's sold products
                 .map(product -> {
                     // Get sales count for this product
-                    long sales = salesCount.getOrDefault(product.getName(), 0L);
-                    return new SimpleEntry<>(product, sales);
+                    long count = salesCount.getOrDefault(product.getName(), 0L);
+                    return new SimpleEntry<>(product, count);
                 })
                 .sorted((a, b) -> Long.compare(b.getValue(), a.getValue())) // Sort by sales descending
                 .map(SimpleEntry::getKey)

@@ -8,12 +8,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 
 import java.util.List;
+import java.util.Map;
 
 @FeignClient(name = "order-service", url = "${order-service.url:http://localhost:8091}", configuration = FeignConfig.class)
 public interface OrderServiceClient {
 
     @GetMapping("/order-service/api/orders/me")
     List<OrderSummaryDto> getMyOrders();
+
+    @GetMapping("/order-service/api/seller/sales")
+    List<Map<String, Object>> getSellerSales(@RequestHeader(value = "Authorization", required = false) String authorization);
 
     @GetMapping("/order-service/api/seller/sales/grouped")
     List<OrderSummaryDto> getSellerSalesGrouped(@RequestHeader(value = "Authorization", required = false) String authorization);

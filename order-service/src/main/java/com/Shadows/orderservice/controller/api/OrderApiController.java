@@ -384,8 +384,22 @@ public class OrderApiController {
 
             product.setPrice(((Number) request.get("price")).doubleValue());
             product.setQuantity(((Number) request.get("quantity")).intValue());
+            product.setDescription((String) request.get("description"));
+            product.setImageUrl((String) request.get("imageUrl"));
             product.setAddedBy(seller);
             product.setStatus(com.Shadows.orderservice.model.ProductStatus.AVAILABLE);
+            product.setCreatedAt(new java.sql.Date(System.currentTimeMillis()));
+
+            // Parse expiry date if provided
+            Object expiryDateObj = request.get("expiryDate");
+            if (expiryDateObj != null && !expiryDateObj.toString().isEmpty()) {
+                try {
+                    java.time.LocalDate parsed = java.time.LocalDate.parse(expiryDateObj.toString());
+                    product.setExpieryDate(java.sql.Date.valueOf(parsed));
+                } catch (Exception dateEx) {
+                    // If date parsing fails, leave it null
+                }
+            }
 
             Product saved = productRepository.save(product);
 
@@ -395,6 +409,10 @@ public class OrderApiController {
             response.put("category", saved.getCategory());
             response.put("price", saved.getPrice());
             response.put("quantity", saved.getQuantity());
+            response.put("description", saved.getDescription());
+            response.put("imageUrl", saved.getImageUrl());
+            response.put("expiryDate", saved.getExpieryDate());
+            response.put("createdAt", saved.getCreatedAt());
             response.put("status", saved.getStatus());
             response.put("seller", saved.getAddedBy());
 

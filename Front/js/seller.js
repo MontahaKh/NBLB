@@ -250,6 +250,9 @@ function submitCreateProduct(e) {
         price: parseFloat(document.getElementById('price').value),
         category: document.getElementById('category').value,
         quantity: parseInt(document.getElementById('quantity').value),
+        description: document.getElementById('description').value,
+        imageUrl: document.getElementById('imageUrl').value,
+        expiryDate: document.getElementById('expiryDate').value,
         addedBy: username
     };
 

@@ -15,6 +15,7 @@
         <module>gateway</module>
         <module>order-service</module>
         <module>payment</module>
+        <module>recommendation-service</module>
 
     </modules>
 </project>
